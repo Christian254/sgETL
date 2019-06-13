@@ -105,7 +105,6 @@ class PermisosSoporte(models.Model):
             ('semi_clientes_frecuentes', 'Director Tactico'),
             ('etl','administrador'),
             ('gestion_usuarios','administrador'),
-            
         )
 
 
