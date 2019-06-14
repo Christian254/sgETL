@@ -47,9 +47,25 @@
                     </div>
                   </div>
                     <ul class="app-menu">
-                        <li><a class="app-menu__item" href="#"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a></li>
-                        <li><a class="app-menu__item" href="#"><i class="app-menu__icon fa fa-pie-chart"></i><span class="app-menu__label">Charts</span></a></li>
+                        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-folder-open-o"></i><span class="app-menu__label">Reportes Estrategico</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+                            <ul class="treeview-menu">
+                              <li><a class="treeview-item " href="{% url 'estrategico:re_producto_generan_ganancias' %}"><i class="icon fa fa-circle-o"></i> Productos con Ganancias</a></li>
+                              <li><a class="treeview-item" href="{% url 'estrategico:re_producto_potenciales' %}"><i class="icon fa fa-circle-o"></i> Productos Potenciales</a></li>
+                              <li><a class="treeview-item" href="{% url 'estrategico:re_producto_ganancias_clientes' %}"><i class="icon fa fa-circle-o"></i> Ganancia de Clientes</a></li>
+                              <li><a class="treeview-item" href="{% url 'estrategico:re_producto_vendido' %}"><i class="icon fa fa-circle-o"></i> Productos Más Vendidos</a></li>
+                              <li><a class="treeview-item" href="{% url 'estrategico:re_producto_tardanza_productos' %}"><i class="icon fa fa-circle-o"></i>Tardanza Movimiento </a></li>
+                            </ul>
+                        </li>
+                        <li class="treeview "><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-folder-open-o"></i><span class="app-menu__label">Reportes Tacticos</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+                            <ul class="treeview-menu">
+                              <li><a class="treeview-item " href=""><i class="icon fa fa-circle-o"></i> Bootstrap Elements</a></li>
+                              <li><a class="treeview-item" href="" ><i class="icon fa fa-circle-o"></i> Font Icons</a></li>
+                              <li><a class="treeview-item" href=""><i class="icon fa fa-circle-o"></i> Cards</a></li>
+                              <li><a class="treeview-item" href=""><i class="icon fa fa-circle-o"></i> Widgets</a></li>
+                            </ul>
+                        </li>
                     </ul>
+                    
                 </aside>
             <main class="app-content">
                 <div class="app-title">

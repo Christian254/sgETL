@@ -1,20 +1,20 @@
 {% extends 'base/base.html' %}
 {% block head_title %}
-Resumen Productos mas Vendidos
+Resumen de Productos Potenciales
 {% endblock head_title %}
 {% block titulo_principal %}
-Resumen productos mas vendidos
+Resumen de Productos Potenciales
 {% endblock titulo_principal %}
 {% block mensaje_titulo %}
 Este es el resumen
 {% endblock mensaje_titulo %}
 {% block enlace_actual %}
-<a href="{% url 'estrategico:re_producto_vendido' %}">produtos mas vendidos</a>
+<a href="{% url 'estrategico:re_producto_potenciales' %}">produtos mas vendidos</a>
 {% endblock enlace_actual %}
 {% block contenido %}
 <div class="container">
         <div class="text-center container-central">
-                <label class="control-label" id="label_custom">Productos mas Vendidos</label>
+                <label class="control-label" id="label_custom">Productos Potenciales</label>
                 <p>11/12/2019</p>
         </div>
     <div class="row">
