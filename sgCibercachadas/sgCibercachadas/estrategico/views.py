@@ -1,9 +1,13 @@
 from django.shortcuts import render
 from django.views import generic
+from general.reporte import plantilla_reporte
 # Create your views here.
 
-class ProductosGeneranGananciasView(generic.TemplateView):
-    template_name='estrategico/productos_mas_ganancias.html'
+def ProductosGeneranGananciasView(request):
+    if request.method == 'POST':
+        nota = []
+        return plantilla_reporte(request, nota, 'prueba')
+    return render(request, 'estrategico/productos_mas_ganancias.html',{})
 
 class ProductosPotencialesView(generic.TemplateView):
     template_name='estrategico/productos_potenciales.html'

@@ -17,40 +17,43 @@ Este es el resumen
                 <label class="control-label" id="label_custom">Productos que generan mas ganancias</label>
                 <p>11/12/2019</p>
         </div>
-    <div class="row">
-        <div class="col-6">
-            <div class="form-group row">
-                <label class="control-label col-3" id="label_custom">Fecha Inicio</label>
-                <input class="form-control col-6" id="fechainicio" type="text" placeholder="Seleccione el dia">
-                <i class="fa fa-calendar fa-2x col-3" aria-hidden="true"></i>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group row">
+                    <label class="control-label col-3" id="label_custom">Fecha Inicio</label>
+                    <input class="form-control col-6" id="fechainicio" type="text" placeholder="Seleccione el dia">
+                    <i class="fa fa-calendar fa-2x col-3" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group row">
+                    <label class="control-label col-3" id="label_custom">Fecha Fin</label>
+                    <input class="form-control col-6" id="fechafin" type="text" placeholder="Seleccione el dia">
+                    <i class="fa fa-calendar fa-2x col-3" aria-hidden="true"></i>
+                </div>
             </div>
         </div>
-        <div class="col-6">
-            <div class="form-group row">
-                <label class="control-label col-3" id="label_custom">Fecha Fin</label>
-                <input class="form-control col-6" id="fechafin" type="text" placeholder="Seleccione el dia">
-                <i class="fa fa-calendar fa-2x col-3" aria-hidden="true"></i>
+           
+    
+        <div class="row">
+            <div class="col-12">
+                <div class="row ">
+                    <div class="col-4">
+                        <button class="btn btn-default boton-custom" type="button">Preview <i class="fa fa-eye fa-2x"  aria-hidden="true"></i></button>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-primary boton-custom" type="submit">Generar Reporte en PDF  <i class="fa fa-file-pdf-o fa-2x"  aria-hidden="true"></i></button>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-success boton-custom" type="button">Generar Reporte en xls <i class="fa fa-file-excel-o fa-2x"  aria-hidden="true"></i></button>
+                    </div>    
+                </div>
             </div>
         </div>
     </div>
-       
-
-    <div class="row">
-        <div class="col-12">
-            <div class="row ">
-                <div class="col-4">
-                    <button class="btn btn-default boton-custom" type="button">Preview <i class="fa fa-eye fa-2x"  aria-hidden="true"></i></button>
-                </div>
-                <div class="col-4">
-                    <button class="btn btn-primary boton-custom" type="button">Generar Reporte en PDF  <i class="fa fa-file-pdf-o fa-2x"  aria-hidden="true"></i></button>
-                </div>
-                <div class="col-4">
-                    <button class="btn btn-success boton-custom" type="button">Generar Reporte en xls <i class="fa fa-file-excel-o fa-2x"  aria-hidden="true"></i></button>
-                </div>    
-            </div>
-        </div>
-    </div>
-</div>
+    </form>
     {% endblock contenido %}
 
 
