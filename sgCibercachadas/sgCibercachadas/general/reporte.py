@@ -1,18 +1,26 @@
 import itertools
-from random import randint
-from statistics import mean
-
+import io
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
-
+from django.http import HttpResponse
 
 def grouper(iterable, n):
     args = [iter(iterable)] * n
     return itertools.zip_longest(*args)
 
 
-def plantilla_reporte(data,nombre):
-    c = canvas.Canvas(f"{nombre}.pdf", pagesize=A4)
+def plantilla_reporte(request,nota,nombre):
+    ##Esta data nosotros la generaremos con django serán las consultas
+    # esta siendo generado aleatoriamente todo lo saqué de un ejemplo de inter y lo fui modificando 
+    data = [("NOMBRE", "NOTA 1", "NOTA 2", "NOTA 3", "PROM.")] # Este es el encabezado
+    for i in nota:        
+        avg = 0
+        data.append((i.nombre, i.nota1,i.nota2,i.nota3, avg))
+    
+    response =HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename={}.pdf'.format(nombre)
+    buffer = io.BytesIO()
+    c = canvas.Canvas(buffer,pagesize=A4)
     w, h = A4
     max_rows_per_page = 25 #Aquí ponemos cuantos registros queremos por páginas
     # Margin.
@@ -21,18 +29,21 @@ def plantilla_reporte(data,nombre):
     # Space between rows.
     padding = 15
     #Imagen
-    c.drawImage("logo.png", x_offset, h - 75, width=50, height=50) #Aquí vamos a buscar la ubicación del logo
+    #c.drawImage("logo.png", x_offset, h - 75, width=50, height=50) #Aquí vamos a buscar la ubicación del logo
     #titulos
-    texto =  c.beginText(w/2, h - 50)
+    titulo = "CompuOfertas"
+    texto =  c.beginText((w-len(titulo))/2-50, h - 50)
     texto.setFont("Times-Roman", 14)
-    texto.textLine("CompuOfertas")
+    texto.textLine(titulo)
     c.drawText(texto)
-    texto =  c.beginText((w/2 - 15), h - 65)
-    texto.textLine("Productos mas vendidos")    
+    subtitulo = "Productos mas vendidos"
+    texto =  c.beginText((w-len(subtitulo))/2-50, h - 65)
+    texto.textLine(subtitulo)    
     c.drawText(texto)
     #Aqui le vamos a mandar los periodos por parametros y concatenarlos
-    texto =  c.beginText((w/2 - 60), h - 80)
-    texto.textLine("Periodo inicio: dd/mm/aa Periodo Fin: dd/mm/aa")
+    periodo = "Periodo inicio: dd/mm/aa Periodo Fin: dd/mm/aa"
+    texto =  c.beginText((w-len(periodo))/2-50, h - 80)
+    texto.textLine(periodo)
     c.drawText(texto)
 
     xlist = [x + x_offset for x in [50, 140, 230, 320, 410, 500]]
@@ -48,13 +59,7 @@ def plantilla_reporte(data,nombre):
         c.showPage()
     
     c.save()
-
-
-##Esta data nosotros la generaremos con django serán las consultas
-# esta siendo generado aleatoriamente todo lo saqué de un ejemplo de inter y lo fui modificando 
-data = [("NOMBRE", "NOTA 1", "NOTA 2", "NOTA 3", "PROM.")] # Este es el encabezado
-for i in range(1, 30):
-    exams = [randint(0, 10) for _ in range(3)]
-    avg = round(mean(exams), 2)
-    data.append((f"Alumno {i}", *exams, avg))
-plantilla_reporte(data,"rep") #Aqui es donde se invoca la funcion se le manda la data y el nombre del reporte
+    pdf= buffer.getvalue()
+    buffer.close()
+    response.write(pdf)
+    return response
