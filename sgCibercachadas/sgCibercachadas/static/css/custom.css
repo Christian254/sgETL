@@ -1,4 +1,15 @@
 #label_custom {
-
     margin-top: 0.5em;
+}
+.boton-custom{
+    margin-left: 1em;
+    margin-right: 1em;
+    width: 100%;
+}
+.container-categorias{
+    margin-bottom: 2em;
+}
+#label_custom_categoria{
+    margin-top: 0.5em;
+    margin-right: 2em;
 }

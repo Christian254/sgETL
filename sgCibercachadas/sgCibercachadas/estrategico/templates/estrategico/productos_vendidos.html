@@ -12,28 +12,54 @@ Este es el resumen
 <a href="/">produtos mas vendidos</a>
 {% endblock enlace_actual %}
 {% block contenido %}
-{{user.is_authenticated}}
 <div class="container">
     <div class="row">
         <div class="col-6">
             <div class="form-group row">
                 <label class="control-label col-3" id="label_custom">Fecha Inicio</label>
-                <input class="form-control col-6" id="fechainicio" type="text" placeholder="Select Date">
+                <input class="form-control col-6" id="fechainicio" type="text" placeholder="Seleccione el dia">
                 <i class="fa fa-calendar fa-2x col-3" aria-hidden="true"></i>
-
             </div>
-
         </div>
         <div class="col-6">
             <div class="form-group row">
                 <label class="control-label col-3" id="label_custom">Fecha Fin</label>
-                <input class="form-control col-6" id="fechafin" type="text" placeholder="Select Date">
+                <input class="form-control col-6" id="fechafin" type="text" placeholder="Seleccione el dia">
                 <i class="fa fa-calendar fa-2x col-3" aria-hidden="true"></i>
-
             </div>
-
         </div>
     </div>
+    <div class="container-categorias">
+        <div class="row justify-content-center ">
+            
+                    <div class="col-1">
+                            <label class="control-label " id="label_custom_categoria">Categoria</label>
+                    </div>
+                    <div class="col-3">
+                        <select id="inputState" class="form-control">
+                            <option selected>Elegir Categoria</option>
+                            <option>...</option>
+                        </select>
+                    </div>
+        </div>
+    </div>      
+
+    <div class="row">
+        <div class="col-12">
+            <div class="row ">
+                <div class="col-4">
+                    <button class="btn btn-default boton-custom" type="button">Preview <i class="fa fa-eye fa-2x"  aria-hidden="true"></i></button>
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-primary boton-custom" type="button">Generar Reporte en PDF  <i class="fa fa-file-pdf-o fa-2x"  aria-hidden="true"></i></button>
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-success boton-custom" type="button">Generar Reporte en xls <i class="fa fa-file-excel-o fa-2x"  aria-hidden="true"></i></button>
+                </div>    
+            </div>
+        </div>
+    </div>
+</div>
     {% endblock contenido %}
 
 
