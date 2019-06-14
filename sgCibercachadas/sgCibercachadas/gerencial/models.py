@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Categoria(models.Model):
     nombre=models.CharField(max_length=25)
@@ -88,6 +89,15 @@ class ProductoPotencial(models.Model):
     def __str__(self):
         return self.nombre
 
+class Empleado(models.Model):
+    id_auth=models.ForeignKey(User,on_delete=models.CASCADE)
+
+class Venta(models.Model):
+    idEmpleado=models.ForeignKey(Empleado,on_delete=models.CASCADE)
+    idCliente=models.ForeignKey(Cliente,on_delete=models.CASCADE)
+    fecha_hora=models.DateTimeField()
+    nombre_cliente= models.CharField(max_length=20)
+
 class PermisosSoporte(models.Model):
     class Meta:
         managed=False
@@ -103,8 +113,9 @@ class PermisosSoporte(models.Model):
             ('semi_productos_consigna', 'Director Tactico'),
             ('semi_ganancias_clientes', 'Director Tactico'),
             ('semi_clientes_frecuentes', 'Director Tactico'),
-            ('etl','administrador'),
-            ('gestion_usuarios','administrador'),
+            ('etl','Administrador'),
+            ('gestion_usuarios','Administrador'),
+            ('actualizar_admin','Delegado')
         )
 
 

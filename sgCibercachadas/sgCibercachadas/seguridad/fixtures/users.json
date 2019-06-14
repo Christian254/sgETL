@@ -1,0 +1,53 @@
+[
+    {
+        "model": "auth.user",
+        "fields": {
+            "username":"estrategico",
+            "first_name": "Usuario",
+            "last_name": "Estrategico",
+            "password":"pbkdf2_sha256$150000$2QoRqQumA4Ot$4PSIJ8cJU/f9F2/XuSaJmeyf5chR4RYxxqEu6TrPtDQ=",
+            "is_superuser":true,
+            "groups":[1]
+        },
+        "pk": 1
+    },
+    {
+        "model": "auth.user",
+        "fields": {
+            "username":"tactico",
+            "first_name": "Usuario",
+            "last_name": "Tactico",
+            "password":"pbkdf2_sha256$150000$2QoRqQumA4Ot$4PSIJ8cJU/f9F2/XuSaJmeyf5chR4RYxxqEu6TrPtDQ=",
+            "is_superuser":true,
+            "groups":[1]
+        },
+        "pk": 2
+    }
+    ,
+    {
+        "model": "auth.user",
+        "fields": {
+            "username":"administrador",
+            "first_name": "Admin",
+            "last_name": "Sistema",
+            "password":"pbkdf2_sha256$150000$2QoRqQumA4Ot$4PSIJ8cJU/f9F2/XuSaJmeyf5chR4RYxxqEu6TrPtDQ=",
+            "is_superuser":true,
+            "is_staff":true,
+            "groups":[3]
+        },
+        "pk": 3
+    },
+    {
+        "model": "auth.user",
+        "fields": {
+            "username":"delegado",
+            "first_name": "Delegado",
+            "last_name": "Sistema",
+            "password":"pbkdf2_sha256$150000$2QoRqQumA4Ot$4PSIJ8cJU/f9F2/XuSaJmeyf5chR4RYxxqEu6TrPtDQ=",
+            "is_superuser":true,
+            "is_staff":true,
+            "groups":[4]
+        },
+        "pk": 4
+    }
+]
