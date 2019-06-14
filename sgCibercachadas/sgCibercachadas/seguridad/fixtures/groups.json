@@ -1,0 +1,35 @@
+[
+
+    {
+        "model": "auth.group",
+        "fields": {
+            "name":"Estrategico",
+            "permissions":[29,30,31,32,33]
+        }
+
+    },
+    {
+        "model": "auth.group",
+        "fields": {
+            "name":"Tactico",
+            "permissions":[34,35,36,37,38,39]
+        }
+
+    },
+    {
+        "model": "auth.group",
+        "fields": {
+            "name":"Administrador",
+            "permissions":[40,41]
+        }
+
+    },
+    {
+        "model": "auth.group",
+        "fields": {
+            "name":"Delegado",
+            "permissions":[42]
+        }
+
+    }
+]

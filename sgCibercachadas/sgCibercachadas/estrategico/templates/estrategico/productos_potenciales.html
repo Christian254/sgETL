@@ -1,0 +1,105 @@
+{% extends 'base/base.html' %}
+{% block head_title %}
+Resumen de Productos Potenciales
+{% endblock head_title %}
+{% block titulo_principal %}
+Resumen de Productos Potenciales
+{% endblock titulo_principal %}
+{% block mensaje_titulo %}
+Este es el resumen
+{% endblock mensaje_titulo %}
+{% block enlace_actual %}
+<a href="{% url 'estrategico:re_producto_potenciales' %}">produtos mas vendidos</a>
+{% endblock enlace_actual %}
+{% block contenido %}
+<div class="container">
+        <div class="text-center container-central">
+                <label class="control-label" id="label_custom">Productos Potenciales</label>
+                <p>11/12/2019</p>
+        </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group row">
+                <label class="control-label col-3" id="label_custom">Fecha Inicio</label>
+                <input class="form-control col-6" id="fechainicio" type="text" placeholder="Seleccione el dia">
+                <i class="fa fa-calendar fa-2x col-3" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group row">
+                <label class="control-label col-3" id="label_custom">Fecha Fin</label>
+                <input class="form-control col-6" id="fechafin" type="text" placeholder="Seleccione el dia">
+                <i class="fa fa-calendar fa-2x col-3" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+    <div class="container-central">
+        <div class="row justify-content-center ">
+                    <div class="col-1">
+                            <label class="control-label " id="label_custom_categoria">Categoria</label>
+                    </div>
+                    <div class="col-3">
+                        <select id="inputState" class="form-control">
+                            <option selected>Elegir Categoria</option>
+                            <option>...</option>
+                        </select>
+                    </div>
+        </div>
+    </div>      
+
+    <div class="row">
+        <div class="col-12">
+            <div class="row ">
+                <div class="col-4">
+                    <button class="btn btn-default boton-custom" type="button">Preview <i class="fa fa-eye fa-2x"  aria-hidden="true"></i></button>
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-primary boton-custom" type="button">Generar Reporte en PDF  <i class="fa fa-file-pdf-o fa-2x"  aria-hidden="true"></i></button>
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-success boton-custom" type="button">Generar Reporte en xls <i class="fa fa-file-excel-o fa-2x"  aria-hidden="true"></i></button>
+                </div>    
+            </div>
+        </div>
+    </div>
+</div>
+    {% endblock contenido %}
+
+
+    {% block plugins %}
+
+
+    <script type="text/javascript">
+        $.fn.datepicker.dates['es'] = {
+            days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+            daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+            months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
+                "Octubre", "Noviembre", "Diciembre"
+            ],
+            monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            today: "Hoy",
+            clear: "Borrar",
+            format: "dd/mm/yyyy",
+            titleFormat: "MM yyyy",
+            /* Leverages same syntax as 'format' */
+            weekStart: 0
+        };
+
+        $('#fechainicio').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            todayHighlight: true,
+            language: 'es'
+        });
+
+
+        $('#fechafin').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            todayHighlight: true,
+            language: 'es'
+
+        });
+    </script>
+    {% endblock plugins %}
