@@ -1,20 +1,20 @@
 {% extends 'base/base.html' %}
 {% block head_title %}
-Semiresumen de Productos que generan mas ganancias
+SemiResumen Retorno de equipos con garantia
 {% endblock head_title %}
 {% block titulo_principal %}
-Semiresumen de Productos que generan mas ganancias
+SemiResumen Retorno de equipos con garantia
 {% endblock titulo_principal %}
 {% block mensaje_titulo %}
-Este es el resumen
+Este es el Semiresumen
 {% endblock mensaje_titulo %}
 {% block enlace_actual %}
-<a href="{% url 'tactico:semire_producto_generan_ganancia' %}">productos que generan mas ganancias</a>
+<a href="{% url 'tactico:semire_retorno_equipos_garantia' %}">Retorno de equipos con garantia</a>
 {% endblock enlace_actual %}
 {% block contenido %}
 <div class="container">
         <div class="text-center container-central">
-                <label class="control-label" id="label_custom">Productos que generan mas ganancias</label>
+                <label class="control-label" id="label_custom">Retorno de equipos con garantia</label>
                 <p>11/12/2019</p>
         </div>
     <div class="row">
@@ -45,7 +45,7 @@ Este es el resumen
                         </select>
                     </div>
         </div>
-    </div>   
+    </div>      
 
     <div class="row">
         <div class="col-12">

@@ -1,20 +1,20 @@
 {% extends 'base/base.html' %}
 {% block head_title %}
-Semiresumen de Productos que generan mas ganancias
+Semiresumen de Clientes Frecuentes
 {% endblock head_title %}
 {% block titulo_principal %}
-Semiresumen de Productos que generan mas ganancias
+Semiresumen de Clientes Frecuentes
 {% endblock titulo_principal %}
 {% block mensaje_titulo %}
 Este es el resumen
 {% endblock mensaje_titulo %}
 {% block enlace_actual %}
-<a href="{% url 'tactico:semire_producto_generan_ganancia' %}">productos que generan mas ganancias</a>
+<a href="{% url 'tactico:semire_clientes_frecuentes' %}">Clientes Frecuentes</a>
 {% endblock enlace_actual %}
 {% block contenido %}
 <div class="container">
         <div class="text-center container-central">
-                <label class="control-label" id="label_custom">Productos que generan mas ganancias</label>
+                <label class="control-label" id="label_custom">Clientes Frecuentes</label>
                 <p>11/12/2019</p>
         </div>
     <div class="row">
@@ -33,19 +33,7 @@ Este es el resumen
             </div>
         </div>
     </div>
-    <div class="container-central">
-        <div class="row justify-content-center ">
-                    <div class="col-1">
-                            <label class="control-label " id="label_custom_categoria">Categoria</label>
-                    </div>
-                    <div class="col-3">
-                        <select id="inputState" class="form-control">
-                            <option selected>Elegir Categoria</option>
-                            <option>...</option>
-                        </select>
-                    </div>
-        </div>
-    </div>   
+   
 
     <div class="row">
         <div class="col-12">
