@@ -4,22 +4,50 @@
     Python >= 3.6
 
 ### Instrucciones
-Crear entorno virtual con el nombre siguiente:
-    `` python -m venv enviroment ``
 
-Activar entorno virtual
-    `` enviroment/bin/activate.sh ``
+1. Posicionarse en ```bash cd sgCiberCachadas/ ```
+2. Crear entorno virtual con el nombre siguiente:
+    ```bash python -m venv enviroment ```
 
-Instalar dependencias del proyecto
-    `` pip install -r requirements.txt ``
+3. Activar entorno virtual en linux
+    ```bash enviroment/bin/activate.sh ```
+4. Activar entorno virtual en windows
+	```bash enviroment/Scripts/activate.bat ```
+
+5. Instalar dependencias del proyecto
+    ```bash pip install -r requirements.txt ```
 
 
-### Base de datos (setup)
+#### Base de datos (setup)
+6. Crear usuario postgreSQL con nombre **usuario** con password **holamundo*
+ ``` create user usuario password 'holamundo' ```
+7. Crear base de datos en PotsgreSQL con nombre **db_sg** asignarla a usuario **usuario**
+ ``` create database db_sg owner usuario ```
+8. ubicarse un directorio arriba ```bash cd sgCibercachadas/sgCibercachadas ```
+9. Realizar migraciones
+    ```bash python manage.py migrate ```
+10. Agregar fixtures
+	```bash python manage.py loaddata groups.json users.json ```
 
-Crear base de datos en PotsgreSQL con nombre **db_sg**
+## ETL Script
 
-Crear usuario postgreSQL con nombre **usuario** con password 
-**holamundo**  
+### Instrucciones
+1. Posicionarse en ```bash cd ETL/ ```
+2. Crear entorno virtual con el nombre siguiente:
+    ```bash python -m venv etl_env ```
 
-Realizar migraciones
-    `` python manage.py migrate ``
+3. Activar entorno virtual en linux
+    ```bash source etl_env/bin/activate ```
+4. Activar entorno virtual en windows
+	```bash etl_env/Scripts/activate.bat ```
+
+5. Instalar dependencias del proyecto
+    ```bash pip install -r requirements.txt ```
+
+#### Base de datos (setup)
+6. Crear base de datos en PotsgreSQL con nombre **db_st** asignarla a usuario **usuario**
+ ``` create database db_sg owner usuario ```
+7. Cargar backup de ubicado en la carpeta ```bash BD-Transaccional/dsi-backup.backup```
+8. ubicarse un directorio arriba ```bash cd ETL/etlSGcachadas ```
+9. ejecutar script ```bash python main.py ```
+ 
