@@ -47,3 +47,7 @@ carga_detalleventa = ('''
 lista_carga=[carga_categoria,carga_proveedor,carga_inventario,carga_cliente,carga_compra
 ,carga_producto,carga_kardex,carga_detallecompra,carga_venta,carga_detalleventa
 ]    
+
+lista_tablas_gerencial=["gerencial_categoria","gerencial_proveedor","gerencial_inventario","gerencial_cliente",
+"gerencial_compra","gerencial_producto","gerencial_kardex","gerencial_detallecompra","gerencial_venta",
+"gerencial_detalleventa"]
