@@ -2,5 +2,4 @@ psycopg2
 django
 pillow
 reportlab
-open
 openpyxl

@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 
 class Categoria(models.Model):
     nombre=models.CharField(max_length=25)
@@ -27,15 +26,15 @@ class Proveedor(models.Model):
         return self.razon_social
 
 class Compra(models.Model):
-    idProveedor=models.ForeignKey(Proveedor,on_delete=models.CASCADE)
-    fechaHora=models.DateTimeField()
+    idProveedor=models.ForeignKey(Proveedor,on_delete=models.CASCADE,db_column='idProveedor')
+    fecha_hora=models.DateTimeField()
 
     def __str__(self):
-        return self.fechaHora
+        return self.fecha_hora
 
 class Producto(models.Model):
-    idCategoria=models.ForeignKey(Categoria,on_delete=models.CASCADE)
-    idInventario=models.ForeignKey(Inventario,on_delete=models.CASCADE)
+    idCategoria=models.ForeignKey(Categoria,on_delete=models.CASCADE,db_column='idCategoria')
+    idInventario=models.ForeignKey(Inventario,on_delete=models.CASCADE,db_column='idInventario')
     codigo=models.CharField(max_length=10)
     nombre=models.CharField(max_length=25)
 
@@ -44,24 +43,24 @@ class Producto(models.Model):
         return self.codigo
 
 class DetalleCompra(models.Model):
-    idCompra=models.ForeignKey(Compra,on_delete=models.CASCADE)
-    idProducto=models.ForeignKey(Producto,on_delete=models.CASCADE)
+    idCompra=models.ForeignKey(Compra,on_delete=models.CASCADE,db_column='idCompra')
+    idProducto=models.ForeignKey(Producto,on_delete=models.CASCADE,db_column='idProducto')
 
     def __str__(self):
         return "detalle compra: compra: "+str(self.idCompra)+" - producto: "+str(self.idProducto)
 
 class Kardex(models.Model):
-    idProducto=models.ForeignKey(Producto,on_delete=models.CASCADE)
+    idProducto=models.ForeignKey(Producto,on_delete=models.CASCADE,db_column='idProducto')
     fecha=models.DateField()
     precExistencia=models.DecimalField(max_digits=8,decimal_places=2)
-    cantExistencias=models.IntegerField()
+    cantExistencia=models.IntegerField()
 
     def __str__(self):
         return str(self.fecha)+" "+str(self.idProducto)
 
 class ProductoRetorno(models.Model):
-    idCliente=models.ForeignKey(Cliente,on_delete=models.CASCADE)
-    idProducto=models.ForeignKey(Producto,on_delete=models.CASCADE)
+    idCliente=models.ForeignKey(Cliente,on_delete=models.CASCADE,db_column='idCliente')
+    idProducto=models.ForeignKey(Producto,on_delete=models.CASCADE,db_column='idProducto')
     cantidad=models.IntegerField()
     nombre_cliente=models.CharField(max_length=20)
     nombre_producto=models.CharField(max_length=40)
@@ -72,8 +71,8 @@ class ProductoRetorno(models.Model):
         return self.codigo
 
 class ProductoConsigna(models.Model):
-    idCliente=models.ForeignKey(Cliente,on_delete=models.CASCADE)
-    idProducto=models.ForeignKey(Producto,on_delete=models.CASCADE)
+    idCliente=models.ForeignKey(Cliente,on_delete=models.CASCADE,db_column='idCliente')
+    idProducto=models.ForeignKey(Producto,on_delete=models.CASCADE,db_column='idProducto')
     cantidad=models.IntegerField()
     fechaInicio=models.DateField()
     fechaFin=models.DateField()
@@ -82,22 +81,31 @@ class ProductoConsigna(models.Model):
         return "consigna: idcliente: "+str(self.idCliente)+" idproducto: "+str(self.idProducto)
 
 class ProductoPotencial(models.Model):
-    idCliente=models.ForeignKey(Cliente,on_delete=models.CASCADE)
+    idCliente=models.ForeignKey(Cliente,on_delete=models.CASCADE,db_column='idCliente')
     nombre=models.CharField(max_length=25)
     cantidad=models.IntegerField()
 
     def __str__(self):
         return self.nombre
 
-class Empleado(models.Model):
-    id_auth=models.ForeignKey(User,on_delete=models.CASCADE)
-
 class Venta(models.Model):
-    idEmpleado=models.ForeignKey(Empleado,on_delete=models.CASCADE)
-    idCliente=models.ForeignKey(Cliente,on_delete=models.CASCADE)
+    idCliente=models.ForeignKey(Cliente,on_delete=models.CASCADE,db_column='idCliente')
     fecha_hora=models.DateTimeField()
-    nombre_cliente= models.CharField(max_length=20)
 
+    def __str__(self):
+        return str(self.fecha_hora)+" - "+str(self.idCliente)
+
+class DetalleVenta(models.Model):
+    idVenta=models.ForeignKey(Venta,on_delete=models.CASCADE,db_column='idVenta')
+    idProducto=models.ForeignKey(Producto,on_delete=models.CASCADE,db_column='idProducto')
+    cantidad=models.IntegerField()
+    precio_unitario=models.DecimalField(max_digits=8,decimal_places=2)
+    descuento=models.DecimalField(max_digits=8,decimal_places=2)
+    total=models.DecimalField(max_digits=20,decimal_places=2) 
+    
+    def __str__(self):
+        return str(self.idVenta)+" - "+str(self.idProducto)
+    
 class PermisosSoporte(models.Model):
     class Meta:
         managed=False
@@ -117,6 +125,5 @@ class PermisosSoporte(models.Model):
             ('gestion_usuarios','Administrador'),
             ('actualizar_admin','Delegado')
         )
-
 
 

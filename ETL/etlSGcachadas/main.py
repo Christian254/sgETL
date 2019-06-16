@@ -1,6 +1,6 @@
 from credenciales import postgres_config_sg, postgres_config_st
 from etl import procesar_etl
-from sql_consultas import psql_consultas 
+from sql_consultas import postgresqlConsultas as psql_consultas
 import psycopg2
 
 def main():

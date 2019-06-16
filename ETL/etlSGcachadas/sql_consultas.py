@@ -1,19 +1,16 @@
-st_extraccion = ('''
-  SELECT nombre
-  FROM prueba;
-''')
-
-sg_carga=('''
-    INSERT INTO gerencial_categoria(nombre)  values( %s )
-''')
+from consultas_carga import lista_carga
+from consultas_extraccion import lista_extraccion
 
 class ConsultaSQL:
     def __init__(self, consulta_extraccion, consulta_carga):
         self.consulta_extraccion = consulta_extraccion
         self.consulta_carga = consulta_carga
     
-    
-psql_consulta_categoria = ConsultaSQL(st_extraccion, sg_carga)
 
-# store as list for iteration
-psql_consultas=[psql_consulta_categoria]
+cantidad=len(lista_carga)
+postgresqlConsultas= []
+
+for i in range(cantidad):
+    consulta= ConsultaSQL(lista_extraccion[i],lista_carga[i])
+    postgresqlConsultas.append(consulta)
+
