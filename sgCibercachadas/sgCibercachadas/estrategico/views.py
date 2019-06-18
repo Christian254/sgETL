@@ -1,9 +1,13 @@
 from django.shortcuts import render,redirect
 from django.views import generic
-from general.reporte import plantilla_reporte
-from general.excel import hoja_calculo
+from plantilla_reporte.estretegicopdf import producto_ganancia,producto_cliente
+from plantilla_reporte.estrategicoxls import producto_gananciaxls
 from django.contrib import messages
-from datetime import datetime
+from django.utils import timezone
+from datetime import datetime,timezone
+from gerencial.models import *
+from django.db.models import Sum,Count
+import operator
 # Create your views here.
 
 class ProductosGeneranGananciasView(generic.TemplateView):
@@ -20,15 +24,28 @@ class ProductosGeneranGananciasView(generic.TemplateView):
         elif(str(datetime.strptime(inicio,'%d/%m/%Y')) > str(datetime.strptime(fin,'%d/%m/%Y'))):
             messages.add_message(request, messages.WARNING, 'Las fechas de inicio debe ser menor que la fecha de fin')
             return redirect(self.request.path_info)
+        
+        fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
+        fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d %H:%M:%S')
+
+        fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
+        fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d %H:%M:%S')
+        #Consulta
+        detalle_venta = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto','idProducto__nombre','idProducto__idInventario__precio_promedio_compra').annotate(Sum('total'),Count('idProducto')))
+        #Calculando Ganancia por cada uno
+        for det in detalle_venta:
+            ganancia = det['total__sum']-(det['idProducto__count']*det['idProducto__idInventario__precio_promedio_compra'])
+            det['ganancia']=ganancia
+        #Ordenando
+        detalle_venta.sort(key=producto_ganancia.clave_orden,reverse=True)
+
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            nota =[]
-            return plantilla_reporte(request,nota,'prueba')
+            return producto_ganancia.reporte(request,detalle_venta, 'prod_ganancia',inicio,fin)
         elif(tipo==3):
-            nota = []
-            return hoja_calculo(request,nota,'prueba')
+            return producto_gananciaxls.hoja_calculo(request,detalle_venta,'prueba',inicio,fin)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -73,12 +90,22 @@ class ProductosGananciasClientesView(generic.TemplateView):
         elif(str(datetime.strptime(inicio,'%d/%m/%Y')) > str(datetime.strptime(fin,'%d/%m/%Y'))):
             messages.add_message(request, messages.WARNING, 'Las fechas de inicio debe ser menor que la fecha de fin')
             return redirect(self.request.path_info)
+        
+        fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
+        fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d %H:%M:%S')
+
+        fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
+        fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d %H:%M:%S')
+        #Consulta
+        detalle_cliente = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto__idInventario__precio_promedio_compra','idVenta__idCliente__nombre','idVenta__idCliente__nombre',).annotate(Count('idProducto'),Sum('total')))
+        for det in detalle_cliente:
+            ganancia = det['total__sum']-(det['idProducto__count']*det['idProducto__idInventario__precio_promedio_compra'])
+            det['ganancia']=ganancia
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            nota =[]
-            return plantilla_reporte(request,nota,'prueba')
+            return producto_cliente.reporte(request,detalle_cliente,'producto_cliente',inicio,fin)
         elif(tipo==3):
             nota = []
             return hoja_calculo(request,nota,'prueba')

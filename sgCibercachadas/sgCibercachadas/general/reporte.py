@@ -9,13 +9,13 @@ def grouper(iterable, n):
     return itertools.zip_longest(*args)
 
 
-def plantilla_reporte(request,nota,nombre):
+def plantilla_reporte(request,datos,nombre):
     ##Esta data nosotros la generaremos con django serán las consultas
     # esta siendo generado aleatoriamente todo lo saqué de un ejemplo de inter y lo fui modificando 
-    data = [("NOMBRE", "NOTA 1", "NOTA 2", "NOTA 3", "PROM.")] # Este es el encabezado
-    for i in nota:        
+    data = [("NOMBRE", "Total", "Cantidad", "NOTA 3", "PROM.")] # Este es el encabezado
+    for i in datos:        
         avg = 0
-        data.append((i.nombre, i.nota1,i.nota2,i.nota3, avg))
+        data.append((i['idProducto__nombre'], i['total__sum'],i['idProducto__count'],0, 0))
     
     response =HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename={}.pdf'.format(nombre)
