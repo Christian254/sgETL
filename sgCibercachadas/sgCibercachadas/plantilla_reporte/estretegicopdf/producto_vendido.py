@@ -13,9 +13,10 @@ registerFont(TTFont('Arial', 'Arial.ttf'))
 def reporte(request,datos,nombre,inicio,fin):
     ##Esta data nosotros la generaremos con django serán las consultas
     # esta siendo generado aleatoriamente todo lo saqué de un ejemplo de inter y lo fui modificando 
-    data = [("Producto", "Ganancia", "Porcentaje")] # Este es el encabezado
+    data = [("Producto", "Cantidad", "Porcentaje")] # Este es el encabezado
     for i in datos:
-        data.append((i['idProducto__nombre'],'$ {}'.format(i['ganancia']), '% {}'.format(i['idProducto'])))
+        data.append((i['idProducto__nombre'],'{}'.format(i['idProducto__count']), '% {}'.format(i['idProducto__count'])))
+    
     response =HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename={}.pdf'.format(nombre)
     buffer = io.BytesIO()
@@ -33,7 +34,7 @@ def reporte(request,datos,nombre,inicio,fin):
     #titulos
     periodo = "Periodo inicio: {} Periodo Fin: {}".format(inicio,fin)
     texto_pdf(c,h,w,"CiberCachada",14,65)
-    texto_pdf(c,h,w,"Productos que generaron mayor ganancia",12,80)
+    texto_pdf(c,h,w,"Productos más vendidos",12,80)
     texto_pdf(c,h,w,periodo,12,95)
 
     xlist = [x + x_offset for x in [50, 200, 350, 500]]
@@ -49,4 +50,4 @@ def reporte(request,datos,nombre,inicio,fin):
     return response
 
 def clave_orden(e):
-    return e['ganancia']
+    return e['idProducto__count']
