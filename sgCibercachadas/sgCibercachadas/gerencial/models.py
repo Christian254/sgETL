@@ -89,14 +89,14 @@ class ProductoPotencial(models.Model):
         return self.nombre
 
 class Venta(models.Model):
-    idCliente=models.ForeignKey(Cliente,on_delete=models.CASCADE,db_column='idCliente')
+    idCliente=models.ForeignKey(Cliente,on_delete=models.CASCADE,db_column='idCliente',null=True)
     fecha_hora=models.DateTimeField()
 
     def __str__(self):
         return str(self.fecha_hora)+" - "+str(self.idCliente)
 
 class DetalleVenta(models.Model):
-    idVenta=models.ForeignKey(Venta,on_delete=models.CASCADE,db_column='idVenta')
+    idVenta=models.ForeignKey(Venta,on_delete=models.CASCADE,db_column='idVenta',null=True)
     idProducto=models.ForeignKey(Producto,on_delete=models.CASCADE,db_column='idProducto')
     cantidad=models.IntegerField()
     precio_unitario=models.DecimalField(max_digits=8,decimal_places=2)
