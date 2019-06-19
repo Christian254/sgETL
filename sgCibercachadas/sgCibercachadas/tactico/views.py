@@ -6,6 +6,13 @@ from general.reporte import plantilla_reporte
 from general.excel import hoja_calculo
 from django.contrib import messages
 from datetime import datetime
+from gerencial.models import *
+from django.db.models import Sum,Count,Q
+from estrategico.forms import  FechasForm
+from plantilla_reporte.tacticopdf import producto_vendido, producto_ganancia
+from plantilla_reporte.tacticoxls import producto_vendidoxls, producto_gananciaxls
+import operator
+
 # Create your views here.
 
 class ProductosMasVendidosView(LoginRequiredMixin,PermissionRequiredMixin, generic.TemplateView):
@@ -17,7 +24,8 @@ class ProductosMasVendidosView(LoginRequiredMixin,PermissionRequiredMixin, gener
         form=FechasForm()
         fecha=datetime.now()
         fecha=datetime.strftime(fecha,'%d/%m/%Y')
-        return render(request, self.template_name, {'form': form,'fecha':fecha})
+        categoria = Categoria.objects.all()
+        return render(request, self.template_name, {'form': form,'fecha':fecha,'categoria':categoria})
 
     def post(self, request, *args, **kwargs):
         form = FechasForm(request.POST)
@@ -27,27 +35,35 @@ class ProductosMasVendidosView(LoginRequiredMixin,PermissionRequiredMixin, gener
             form.AddIsInvalid()
             return render(request, self.template_name, {'form':form})
 
-        inicio = request.POST.get('fechainicio',None)
-        fin = request.POST.get('fechafin',None)
-        tipo = int(request.POST.get('tipo',None))
+        inicio=request.POST.get("fechainicio",None)
+        fin=request.POST.get("fechafin",None)
+        tipo=int(request.POST.get("tipo",None))
+        categoria = request.POST.get('categoria',None)
 
-        if(not(inicio) or not(fin)):
-            messages.add_message(request, messages.WARNING, 'Las fechas son obligatorias')
-            return redirect(self.request.path_info)
+        fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
+        fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d %H:%M:%S')
 
-        elif(str(datetime.strptime(inicio,'%d/%m/%Y')) > str(datetime.strptime(fin,'%d/%m/%Y'))):
-            messages.add_message(request, messages.WARNING, 'Las fechas de inicio debe ser menor que la fecha de fin')
-            return redirect(self.request.path_info)
+        fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
+        fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d %H:%M:%S')
+        
+        if(categoria):
+            detalle_vendido = list(DetalleVenta.objects.filter(Q(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)) & Q(idProducto__idCategoria__nombre=categoria)).values('idProducto__nombre','idProducto__idInventario__precio_promedio_compra').annotate(Sum('total'),Sum('cantidad')))
+        else: 
+            detalle_vendido = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto__nombre','idProducto__idCategoria__nombre','idProducto__idInventario__precio_promedio_compra').annotate(Sum('total'),Sum('cantidad')))
+               
 
+        for det in detalle_vendido:
+            ganancia = det['total__sum']-(det['cantidad__sum']*det['idProducto__idInventario__precio_promedio_compra'])
+            det['ganancia'] = ganancia
+        
+        detalle_vendido.sort(key=producto_vendido.clave_orden,reverse=True)
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            nota =[]
-            return plantilla_reporte(request,nota,'prueba')
+            return producto_vendido.reporte(request,detalle_vendido,'producto_vendido_tactico',inicio,fin,categoria)
         elif(tipo==3):
-            nota = []
-            return hoja_calculo(request,nota,'prueba')
+            return producto_vendidoxls.hoja_calculo(request,detalle_vendido,'producto_vendido_tactico',inicio,fin,categoria)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -61,7 +77,8 @@ class ProductosGeneranGananciaView(LoginRequiredMixin,PermissionRequiredMixin,ge
         form=FechasForm()
         fecha=datetime.now()
         fecha=datetime.strftime(fecha,'%d/%m/%Y')
-        return render(request, self.template_name, {'form': form,'fecha':fecha})
+        categoria = Categoria.objects.all()
+        return render(request, self.template_name, {'form': form,'fecha':fecha,'categoria':categoria})
 
     def post(self, request, *args, **kwargs):
         form = FechasForm(request.POST)
@@ -71,19 +88,35 @@ class ProductosGeneranGananciaView(LoginRequiredMixin,PermissionRequiredMixin,ge
             form.AddIsInvalid()
             return render(request, self.template_name, {'form':form})
 
-        inicio = request.POST.get('fechainicio',None)
-        fin = request.POST.get('fechafin',None)
-        tipo = int(request.POST.get('tipo',None))
+        inicio=request.POST.get("fechainicio",None)
+        fin=request.POST.get("fechafin",None)
+        tipo=int(request.POST.get("tipo",None))
+        categoria = request.POST.get('categoria',None)
+
+        fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
+        fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d %H:%M:%S')
+
+        fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
+        fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d %H:%M:%S')
         
+        if(categoria):
+            detalle_vendido = list(DetalleVenta.objects.filter(Q(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)) & Q(idProducto__idCategoria__nombre=categoria)).values('idProducto__nombre','idProducto__idInventario__precio_promedio_compra').annotate(Count('idProducto'),Sum('total'),Sum('cantidad')))
+        else: 
+            detalle_vendido = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto__nombre','idProducto__idCategoria__nombre','idProducto__idInventario__precio_promedio_compra').annotate(Count('idProducto'),Sum('total'),Sum('cantidad')))
+               
+
+        for det in detalle_vendido:
+            ganancia = det['total__sum']-(det['cantidad__sum']*det['idProducto__idInventario__precio_promedio_compra'])
+            det['ganancia'] = ganancia
+        
+        detalle_vendido.sort(key=producto_ganancia.clave_orden,reverse=True)
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            nota =[]
-            return plantilla_reporte(request,nota,'prueba')
+            return producto_ganancia.reporte(request,detalle_vendido,'producto_ganancia_tactico',inicio,fin,categoria)
         elif(tipo==3):
-            nota = []
-            return hoja_calculo(request,nota,'prueba')
+            return producto_gananciaxls.hoja_calculo(request,detalle_vendido,'producto_ganancia_tactico',inicio,fin,categoria)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)

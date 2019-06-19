@@ -10,13 +10,10 @@ from datetime import datetime
 
 registerFont(TTFont('Arial', 'Arial.ttf'))
 
-def reporte(request,datos,nombre,inicio,fin,total):
+def reporte(request,datos,nombre,inicio,fin,categoria):
     ##Esta data nosotros la generaremos con django serán las consultas
     # esta siendo generado aleatoriamente todo lo saqué de un ejemplo de inter y lo fui modificando 
-    data = [("Producto", "Cantidad", "Porcentaje")] # Este es el encabezado
-    for i in datos:
-        data.append((i['idProducto__nombre'],'{}'.format(i['cantidad__sum']), '% {}'.format(round(i['cantidad__sum']/total *100,2))))
-    
+   
     response =HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename={}.pdf'.format(nombre)
     buffer = io.BytesIO()
@@ -36,9 +33,18 @@ def reporte(request,datos,nombre,inicio,fin,total):
     texto_pdf(c,h,w,"CiberCachada",14,65)
     texto_pdf(c,h,w,"Productos más vendidos",12,80)
     texto_pdf(c,h,w,periodo,12,95)
-
-    xlist = [x + x_offset for x in [50, 200, 350, 500]]
-    ylist = [h - y_offset - i*padding for i in range(max_rows_per_page + 1)]
+    if(categoria):
+        data = [("Producto", "Cantidad","Ganancia","Inventario")] # Este es el encabezado
+        for i in datos:
+            data.append((i['idProducto__nombre'],'{}'.format(i['cantidad__sum']), '$ {}'.format(i['ganancia'])))
+        xlist = [x + x_offset for x in [50, 200, 325,440,500]]
+        ylist = [h - y_offset - i*padding for i in range(max_rows_per_page + 1)]
+    else:
+        data = [("Producto", "Categoria", "Cantidad","Ganancia","Inventario")] # Este es el encabezado
+        for i in datos:
+            data.append((i['idProducto__nombre'],i['idProducto__idCategoria__nombre'],'{}'.format(i['cantidad__sum']), '$ {}'.format(i['ganancia'])))
+        xlist = [x + x_offset for x in [50, 200, 300, 370,440,500]]
+        ylist = [h - y_offset - i*padding for i in range(max_rows_per_page + 1)]
     
     #Aquí es donde inserta la data
     insert_data_pdf(data, max_rows_per_page,xlist,ylist,c,padding)

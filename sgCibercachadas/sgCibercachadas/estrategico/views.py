@@ -41,21 +41,21 @@ class ProductosGeneranGananciasView(LoginRequiredMixin,PermissionRequiredMixin,g
         fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
         fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d %H:%M:%S')
         #Consulta
-        detalle_venta = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto','idProducto__nombre','idProducto__idInventario__precio_promedio_compra').annotate(Sum('total'),Count('idProducto')))
+        detalle_venta = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto','idProducto__nombre','idProducto__idInventario__precio_promedio_compra').annotate(Sum('total'),Sum('cantidad')))
         #Calculando Ganancia por cada uno
         total_ganancia = 0
         for det in detalle_venta:
-            ganancia = det['total__sum']-(det['idProducto__count']*det['idProducto__idInventario__precio_promedio_compra'])
+            ganancia = det['total__sum']-(det['cantidad__sum']*det['idProducto__idInventario__precio_promedio_compra'])
             det['ganancia']=ganancia
             total_ganancia += ganancia
         #Ordenando
         detalle_venta.sort(key=producto_ganancia.clave_orden,reverse=True)
-
+        print(detalle_venta)
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_ganancia.reporte(request,detalle_venta, 'prod_ganancia',inicio,fin, total_ganancia)
+            return producto_ganancia.reporte(request,detalle_venta[:50], 'prod_ganancia',inicio,fin, total_ganancia)
         elif(tipo==3):
             return producto_gananciaxls.hoja_calculo(request,detalle_venta,'prueba',inicio,fin,total_ganancia)
         else:
@@ -176,14 +176,14 @@ class ProductosVendidosView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
         fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d %H:%M:%S')
         
         if(categoria):
-            detalle_vendido = list(DetalleVenta.objects.filter(Q(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)) & Q(idProducto__idCategoria__nombre=categoria)).values('idProducto__nombre').annotate(Count('idProducto')))
+            detalle_vendido = list(DetalleVenta.objects.filter(Q(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)) & Q(idProducto__idCategoria__nombre=categoria)).values('idProducto__nombre').annotate(Sum('cantidad')))
         else: 
-            detalle_vendido = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto__nombre').annotate(Count('idProducto')))
+            detalle_vendido = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto__nombre').annotate(Sum('cantidad')))
         detalle_vendido.sort(key=producto_vendido.clave_orden,reverse=True)
         
         total_cantidad = 0
         for det in detalle_vendido:
-            total_cantidad += det['idProducto__count']
+            total_cantidad += det['cantidad__sum']
 
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')

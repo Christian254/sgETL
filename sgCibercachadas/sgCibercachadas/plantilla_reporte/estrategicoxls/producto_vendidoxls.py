@@ -25,8 +25,8 @@ def hoja_calculo(request,data,nombre,inicio,fin,total):
         #notas será la data que vamos a tener en el query
         for i in data:
                 ws.cell(row=cont,column=1).value = i['idProducto__nombre']
-                ws.cell(row=cont,column=2).value = i['idProducto__count']
-                ws.cell(row=cont,column=3).value = round(i['idProducto__count']/total *100,2)
+                ws.cell(row=cont,column=2).value = i['cantidad__sum']
+                ws.cell(row=cont,column=3).value = round(i['cantidad__sum']/total *100,2)
                 cont = cont + 1
         #Definimos que el tipo de respuesta a devolver es un archivo de microsoft excel
         response = HttpResponse(content_type="application/ms-excel")
