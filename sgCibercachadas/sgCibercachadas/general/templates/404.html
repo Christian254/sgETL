@@ -1,0 +1,23 @@
+{% extends 'base/base.html' %}
+{% block head_title %}
+    Error 404
+{% endblock head_title %}
+{% block titulo_principal %}
+
+{% endblock titulo_principal %}
+{% block mensaje_titulo %}
+
+{% endblock mensaje_titulo %}
+{% block enlace_actual %}
+{% endblock enlace_actual %}
+{% block contenido %} 
+<script>
+    document.getElementsByClassName("app-title")[0].remove();
+</script>
+
+<div class="page-error tile">
+    <h1><i class="fa fa-exclamation-circle"></i> Error 404: Esta pagina no existe </h1>
+    <p>La pagina solicitada, no existe</p>
+    <p><a class="btn btn-primary" href="javascript:window.history.back();"> Regresar </a></p>
+  </div>
+{% endblock contenido %}

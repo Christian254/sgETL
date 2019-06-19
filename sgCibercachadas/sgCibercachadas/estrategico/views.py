@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.views import generic
 from plantilla_reporte.estretegicopdf import producto_ganancia,producto_cliente,producto_vendido
 from plantilla_reporte.estrategicoxls import producto_gananciaxls,producto_clientexls,producto_vendidoxls
@@ -7,24 +8,33 @@ from django.utils import timezone
 from datetime import datetime,timezone
 from gerencial.models import *
 from django.db.models import Sum,Count,Q
+from estrategico.forms import  FechasForm
 import operator
 # Create your views here.
 #LOS CALCULOS DE LOS PORCENTAJES NO SE HAN REALIZADO
-class ProductosGeneranGananciasView(generic.TemplateView):
+class ProductosGeneranGananciasView(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateView):
     template_name='estrategico/productos_mas_ganancias.html'
+    login_url='general:login'
+    permission_required = 'gerencial.resumen_productos_ganancias'
+
+    def get(self,request,*args,**kwargs):
+        form=FechasForm()
+        fecha=datetime.now()
+        fecha=datetime.strftime(fecha,'%d/%m/%Y')
+        return render(request, self.template_name, {'form': form,'fecha':fecha})
 
     def post(self, request, *args, **kwargs):
-        inicio = request.POST.get('fechainicio',None)
-        fin = request.POST.get('fechafin',None)
-        tipo = int(request.POST.get('tipo',None))
-        if(not(inicio) or not(fin)):
-            messages.add_message(request, messages.WARNING, 'Las fechas son obligatorias')
-            return redirect(self.request.path_info)
+        form = FechasForm(request.POST)
+        if form.is_valid():
+            print("valido")
+        else:
+            form.AddIsInvalid()
+            return render(request, self.template_name, {'form':form})
 
-        elif(str(datetime.strptime(inicio,'%d/%m/%Y')) > str(datetime.strptime(fin,'%d/%m/%Y'))):
-            messages.add_message(request, messages.WARNING, 'Las fechas de inicio debe ser menor que la fecha de fin')
-            return redirect(self.request.path_info)
-        
+        inicio=request.POST.get("fechainicio",None)
+        fin=request.POST.get("fechafin",None)
+        tipo=request.POST.get("tipo",None)
+
         fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
         fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d %H:%M:%S')
 
@@ -51,19 +61,29 @@ class ProductosGeneranGananciasView(generic.TemplateView):
             return redirect(self.request.path_info)
         
 
-class ProductosPotencialesView(generic.TemplateView):
+class ProductosPotencialesView(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateView):
     template_name='estrategico/productos_potenciales.html'
-    def post(self, request, *args, **kwargs):
-        inicio = request.POST.get('fechainicio',None)
-        fin = request.POST.get('fechafin',None)
-        tipo = int(request.POST.get('tipo',None))
-        if(not(inicio) or not(fin)):
-            messages.add_message(request, messages.WARNING, 'Las fechas son obligatorias')
-            return redirect(self.request.path_info)
+    login_url='general:login'
+    permission_required = 'gerencial.resumen_productos_potenciales'
 
-        elif(str(datetime.strptime(inicio,'%d/%m/%Y')) > str(datetime.strptime(fin,'%d/%m/%Y'))):
-            messages.add_message(request, messages.WARNING, 'Las fechas de inicio debe ser menor que la fecha de fin')
-            return redirect(self.request.path_info)
+    def get(self,request,*args,**kwargs):
+        form=FechasForm()
+        fecha=datetime.now()
+        fecha=datetime.strftime(fecha,'%d/%m/%Y')
+        return render(request, self.template_name, {'form': form,'fecha':fecha})
+
+    def post(self, request, *args, **kwargs):
+        form = FechasForm(request.POST)
+        if form.is_valid():
+            print("valido")
+        else:
+            form.AddIsInvalid()
+            return render(request, self.template_name, {'form':form})
+
+        inicio=request.POST.get("fechainicio",None)
+        fin=request.POST.get("fechafin",None)
+        tipo=request.POST.get("tipo",None)
+
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
@@ -77,20 +97,29 @@ class ProductosPotencialesView(generic.TemplateView):
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
 
-class ProductosGananciasClientesView(generic.TemplateView):
+class ProductosGananciasClientesView(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateView):
     template_name='estrategico/productos_ganancias_clientes.html'
-    def post(self, request, *args, **kwargs):
-        inicio = request.POST.get('fechainicio',None)
-        fin = request.POST.get('fechafin',None)
-        tipo = int(request.POST.get('tipo',None))
-        if(not(inicio) or not(fin)):
-            messages.add_message(request, messages.WARNING, 'Las fechas son obligatorias')
-            return redirect(self.request.path_info)
+    login_url='general:login'
+    permission_required = 'gerencial.resumen_ganancias_clientes'
+    
+    def get(self,request,*args,**kwargs):
+        form=FechasForm()
+        fecha=datetime.now()
+        fecha=datetime.strftime(fecha,'%d/%m/%Y')
+        return render(request, self.template_name, {'form': form,'fecha':fecha})
 
-        elif(str(datetime.strptime(inicio,'%d/%m/%Y')) > str(datetime.strptime(fin,'%d/%m/%Y'))):
-            messages.add_message(request, messages.WARNING, 'Las fechas de inicio debe ser menor que la fecha de fin')
-            return redirect(self.request.path_info)
+    def post(self, request, *args, **kwargs):
+        form = FechasForm(request.POST)
+        if form.is_valid():
+            print("valido")
+        else:
+            form.AddIsInvalid()
+            return render(request, self.template_name, {'form':form})
         
+        inicio=request.POST.get("fechainicio",None)
+        fin=request.POST.get("fechafin",None)
+        tipo=request.POST.get("tipo",None)
+
         fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
         fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d %H:%M:%S')
 
@@ -114,26 +143,36 @@ class ProductosGananciasClientesView(generic.TemplateView):
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
 
-class ProductosVendidosView(generic.TemplateView):
+class ProductosVendidosView(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateView):
     template_name='estrategico/productos_vendidos.html'
-    def post(self, request, *args, **kwargs):
-        inicio = request.POST.get('fechainicio',None)
-        fin = request.POST.get('fechafin',None)
-        tipo = int(request.POST.get('tipo',None))
-        categoria = request.POST.get('categoria',None)
-        if(not(inicio) or not(fin)):
-            messages.add_message(request, messages.WARNING, 'Las fechas son obligatorias')
-            return redirect(self.request.path_info)
+    login_url='general:login'
+    permission_required = 'gerencial.resumen_productos_vendidos'
+    
+    def get(self,request,*args,**kwargs):
+        form=FechasForm()
+        fecha=datetime.now()
+        fecha=datetime.strftime(fecha,'%d/%m/%Y')
+        return render(request, self.template_name, {'form': form,'fecha':fecha})
 
-        elif(str(datetime.strptime(inicio,'%d/%m/%Y')) > str(datetime.strptime(fin,'%d/%m/%Y'))):
-            messages.add_message(request, messages.WARNING, 'Las fechas de inicio debe ser menor que la fecha de fin')
-            return redirect(self.request.path_info)
+    def post(self, request, *args, **kwargs):
+        form = FechasForm(request.POST)
+        if form.is_valid():
+            print("valido")
+        else:
+            form.AddIsInvalid()
+            return render(request, self.template_name, {'form':form})
+
+        inicio=request.POST.get("fechainicio",None)
+        fin=request.POST.get("fechafin",None)
+        tipo=request.POST.get("tipo",None)
+        categoria = request.POST.get('categoria',None)
 
         fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
         fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d %H:%M:%S')
 
         fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
         fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d %H:%M:%S')
+        
         if(categoria):
             detalle_vendido = list(DetalleVenta.objects.filter(Q(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)) & Q(idProducto__idCategoria__nombre=categoria)).values('idProducto__nombre').annotate(Count('idProducto'),Sum('total')))
         else: 
@@ -151,19 +190,30 @@ class ProductosVendidosView(generic.TemplateView):
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
 
-class ProductosTardanzaProductosView(generic.TemplateView):
+class ProductosTardanzaProductosView(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateView):
     template_name='estrategico/productos_tardanzas_movimiento.html'
-    def post(self, request, *args, **kwargs):
-        inicio = request.POST.get('fechainicio',None)
-        fin = request.POST.get('fechafin',None)
-        tipo = int(request.POST.get('tipo',None))
-        if(not(inicio) or not(fin)):
-            messages.add_message(request, messages.WARNING, 'Las fechas son obligatorias')
-            return redirect(self.request.path_info)
+    login_url='general:login'
+    permission_required = 'gerencial.resumen_tardanzas_productos'
 
-        elif(str(datetime.strptime(inicio,'%d/%m/%Y')) > str(datetime.strptime(fin,'%d/%m/%Y'))):
-            messages.add_message(request, messages.WARNING, 'Las fechas de inicio debe ser menor que la fecha de fin')
-            return redirect(self.request.path_info)
+    
+    def get(self,request,*args,**kwargs):
+        form=FechasForm()
+        fecha=datetime.now()
+        fecha=datetime.strftime(fecha,'%d/%m/%Y')
+        return render(request, self.template_name, {'form': form,'fecha':fecha})
+
+    def post(self, request, *args, **kwargs):
+        form = FechasForm(request.POST)
+        if form.is_valid():
+            print("valido")
+        else:
+            form.AddIsInvalid()
+            return render(request, self.template_name, {'form':form})
+
+        inicio=request.POST.get("fechainicio",None)
+        fin=request.POST.get("fechafin",None)
+        tipo=request.POST.get("tipo",None)
+        
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)

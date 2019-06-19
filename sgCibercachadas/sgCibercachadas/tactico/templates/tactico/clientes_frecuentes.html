@@ -23,26 +23,12 @@ Este es el resumen
 <div class="container">
         <div class="text-center container-central">
                 <label class="control-label" id="label_custom">Clientes Frecuentes</label>
-                <p>11/12/2019</p>
+                <p>{{fecha}}</p>
         </div>
     <form action="" method="post">
         {% csrf_token %}
-        <div class="row">
-            <div class="col-6">
-                <div class="form-group row">
-                    <label class="control-label col-3" id="label_custom">Fecha Inicio</label>
-                    <input name="fechainicio" class="form-control col-6" id="fechainicio" type="text" placeholder="Seleccione el dia">
-                    <i class="fa fa-calendar fa-2x col-3" aria-hidden="true"></i>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group row">
-                    <label class="control-label col-3" id="label_custom">Fecha Fin</label>
-                    <input name="fechafin" class="form-control col-6" id="fechafin" type="text" placeholder="Seleccione el dia">
-                    <i class="fa fa-calendar fa-2x col-3" aria-hidden="true"></i>
-                </div>
-            </div>
-        </div>
+        {% include "base/fechas_snippet.html" %}
+        
        
     
         <div class="row">
@@ -68,38 +54,6 @@ Este es el resumen
 
     {% block plugins %}
 
+    {% include "base/conf_fechas.html" %}
 
-    <script type="text/javascript">
-        $.fn.datepicker.dates['es'] = {
-            days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-            daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
-            daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
-            months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
-                "Octubre", "Noviembre", "Diciembre"
-            ],
-            monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-            today: "Hoy",
-            clear: "Borrar",
-            format: "dd/mm/yyyy",
-            titleFormat: "MM yyyy",
-            /* Leverages same syntax as 'format' */
-            weekStart: 0
-        };
-
-        $('#fechainicio').datepicker({
-            format: "dd/mm/yyyy",
-            autoclose: true,
-            todayHighlight: true,
-            language: 'es'
-        });
-
-
-        $('#fechafin').datepicker({
-            format: "dd/mm/yyyy",
-            autoclose: true,
-            todayHighlight: true,
-            language: 'es'
-
-        });
-    </script>
     {% endblock plugins %}
