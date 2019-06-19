@@ -33,7 +33,7 @@ class ProductosGeneranGananciasView(LoginRequiredMixin,PermissionRequiredMixin,g
 
         inicio=request.POST.get("fechainicio",None)
         fin=request.POST.get("fechafin",None)
-        tipo=request.POST.get("tipo",None)
+        tipo=int(request.POST.get("tipo",None))
 
         fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
         fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d %H:%M:%S')
@@ -43,9 +43,11 @@ class ProductosGeneranGananciasView(LoginRequiredMixin,PermissionRequiredMixin,g
         #Consulta
         detalle_venta = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto','idProducto__nombre','idProducto__idInventario__precio_promedio_compra').annotate(Sum('total'),Count('idProducto')))
         #Calculando Ganancia por cada uno
+        total_ganancia = 0
         for det in detalle_venta:
             ganancia = det['total__sum']-(det['idProducto__count']*det['idProducto__idInventario__precio_promedio_compra'])
             det['ganancia']=ganancia
+            total_ganancia += ganancia
         #Ordenando
         detalle_venta.sort(key=producto_ganancia.clave_orden,reverse=True)
 
@@ -53,9 +55,9 @@ class ProductosGeneranGananciasView(LoginRequiredMixin,PermissionRequiredMixin,g
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_ganancia.reporte(request,detalle_venta, 'prod_ganancia',inicio,fin)
+            return producto_ganancia.reporte(request,detalle_venta, 'prod_ganancia',inicio,fin, total_ganancia)
         elif(tipo==3):
-            return producto_gananciaxls.hoja_calculo(request,detalle_venta,'prueba',inicio,fin)
+            return producto_gananciaxls.hoja_calculo(request,detalle_venta,'prueba',inicio,fin,total_ganancia)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -164,7 +166,7 @@ class ProductosVendidosView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
 
         inicio=request.POST.get("fechainicio",None)
         fin=request.POST.get("fechafin",None)
-        tipo=request.POST.get("tipo",None)
+        tipo=int(request.POST.get("tipo",None))
         categoria = request.POST.get('categoria',None)
 
         fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
@@ -174,18 +176,22 @@ class ProductosVendidosView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
         fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d %H:%M:%S')
         
         if(categoria):
-            detalle_vendido = list(DetalleVenta.objects.filter(Q(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)) & Q(idProducto__idCategoria__nombre=categoria)).values('idProducto__nombre').annotate(Count('idProducto'),Sum('total')))
+            detalle_vendido = list(DetalleVenta.objects.filter(Q(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)) & Q(idProducto__idCategoria__nombre=categoria)).values('idProducto__nombre').annotate(Count('idProducto')))
         else: 
-            detalle_vendido = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto__nombre').annotate(Count('idProducto'),Sum('total')))
+            detalle_vendido = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto__nombre').annotate(Count('idProducto')))
         detalle_vendido.sort(key=producto_vendido.clave_orden,reverse=True)
+        
+        total_cantidad = 0
+        for det in detalle_vendido:
+            total_cantidad += det['idProducto__count']
 
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_vendido.reporte(request,detalle_vendido,'producto_vendido',inicio,fin)
+            return producto_vendido.reporte(request,detalle_vendido,'producto_vendido',inicio,fin,total_cantidad)
         elif(tipo==3):
-            return producto_vendidoxls.hoja_calculo(request,detalle_vendido,'producto_vendido',inicio,fin)
+            return producto_vendidoxls.hoja_calculo(request,detalle_vendido,'producto_vendido',inicio,fin,total_cantidad)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
