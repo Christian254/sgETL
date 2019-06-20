@@ -144,6 +144,13 @@ class RetornoEquiposGarantiaView(LoginRequiredMixin,PermissionRequiredMixin,gene
         fin = request.POST.get('fechafin',None)
         tipo = int(request.POST.get('tipo',None))
 
+        fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
+        fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d')
+
+        fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
+        fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d')
+        
+        retorno = ProductoRetorno.objects.filter(fecha__range=(fecha_fin,fecha_fin)).values('idProducto__')
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
