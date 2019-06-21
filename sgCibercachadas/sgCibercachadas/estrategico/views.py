@@ -9,7 +9,9 @@ from datetime import datetime,timezone
 from gerencial.models import *
 from django.db.models import Sum,Count,Q
 from estrategico.forms import  FechasForm
+from plantilla_reporte.funciones.funciones import agrupar
 import operator
+
 # Create your views here.
 #LOS CALCULOS DE LOS PORCENTAJES NO SE HAN REALIZADO
 class ProductosGeneranGananciasView(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateView):
@@ -41,16 +43,21 @@ class ProductosGeneranGananciasView(LoginRequiredMixin,PermissionRequiredMixin,g
         fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
         fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d %H:%M:%S')
         #Consulta
-        detalle_venta = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto','idProducto__nombre','idProducto__idInventario__precio_promedio_compra').annotate(Sum('total'),Sum('cantidad')))
-        #Calculando Ganancia por cada uno
+        detalle_venta = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto','idProducto__nombre').annotate(Sum('cantidad'),Sum('total')))
+        fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
+        fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d')
+        kardex = []
         total_ganancia = 0
         for det in detalle_venta:
-            ganancia = det['total__sum']-(det['cantidad__sum']*det['idProducto__idInventario__precio_promedio_compra'])
-            det['ganancia']=ganancia
-            total_ganancia += ganancia
-        #Ordenando
-        detalle_venta.sort(key=producto_ganancia.clave_orden,reverse=True)
-        print(detalle_venta)
+            prod = Kardex.objects.filter(Q(fecha__lte=fecha_fin)& Q(idProducto=det['idProducto'])).order_by('-fecha').first()
+            kardex.append(prod)
+            if(prod):
+                det['costo'] = prod.precExistencia
+            else:
+                det['costo'] = 0        
+            det['ganancia'] = det['total__sum'] - det['cantidad__sum'] * det['costo']
+            total_ganancia += det['ganancia']
+        detalle_venta.sort(key=producto_ganancia.clave_orden, reverse=True)
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
@@ -120,7 +127,7 @@ class ProductosGananciasClientesView(LoginRequiredMixin,PermissionRequiredMixin,
         
         inicio=request.POST.get("fechainicio",None)
         fin=request.POST.get("fechafin",None)
-        tipo=request.POST.get("tipo",None)
+        tipo=int(request.POST.get("tipo",None))
 
         fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
         fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d %H:%M:%S')
@@ -128,19 +135,29 @@ class ProductosGananciasClientesView(LoginRequiredMixin,PermissionRequiredMixin,
         fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
         fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d %H:%M:%S')
         #Consulta
-        detalle_cliente = list(DetalleVenta.objects.filter(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin)).values('idProducto__idInventario__precio_promedio_compra','idVenta__idCliente__nombre').annotate(Count('idProducto'),Sum('total')))
+        detalle_cliente = list(DetalleVenta.objects.filter(Q(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin))&Q(idVenta__idCliente__isnull=False)).values('idProducto','idVenta__idCliente__nombre').annotate(Sum('cantidad'),Sum('total')))
+        fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
+        fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d')
+        total_ganancia = 0
         for det in detalle_cliente:
-            ganancia = det['total__sum']-(det['idProducto__count']*det['idProducto__idInventario__precio_promedio_compra'])
-            det['ganancia']=ganancia
-        detalle_cliente.sort(key=producto_ganancia.clave_orden,reverse=True)
-        ##FALTA AGRUPAR A LOS CLIENTES Y SUMAR LA GANANCIA
+            prod = Kardex.objects.filter(Q(fecha__lte=fecha_fin)& Q(idProducto=det['idProducto'])).order_by('-fecha').first()
+            if(prod):
+                det['costo'] = prod.precExistencia
+            else:
+                det['costo'] = 0        
+            det['ganancia'] = det['total__sum'] - det['cantidad__sum'] * det['costo']
+            total_ganancia += det['ganancia']
+
+        cliente_agrupado = agrupar(detalle_cliente,'idVenta__idCliente__nombre','ganancia')
+        cliente_agrupado.sort(key=producto_ganancia.clave_orden,reverse=True)
+        
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_cliente.reporte(request,detalle_cliente,'producto_cliente',inicio,fin)
+            return producto_cliente.reporte(request,cliente_agrupado,'producto_cliente',inicio,fin,total_ganancia)
         elif(tipo==3):
-            return producto_clientexls.hoja_calculo(request,detalle_cliente,'producto_cliente',inicio,fin)
+            return producto_clientexls.hoja_calculo(request,cliente_agrupado,'producto_cliente',inicio,fin,total_ganancia)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)

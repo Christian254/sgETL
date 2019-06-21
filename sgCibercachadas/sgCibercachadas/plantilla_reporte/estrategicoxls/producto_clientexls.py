@@ -2,7 +2,7 @@ from openpyxl import Workbook
 #Nos devuelve un objeto resultado, en este caso un archivo de excel
 from django.http.response import HttpResponse
 
-def hoja_calculo(request,data,nombre,inicio,fin):
+def hoja_calculo(request,data,nombre,inicio,fin,total):
         wb = Workbook()
         ws = wb.active
         #En la celda A1 ponemos el texto 'REPORTE DE NOTAS'
@@ -26,7 +26,7 @@ def hoja_calculo(request,data,nombre,inicio,fin):
         for i in data:
                 ws.cell(row=cont,column=1).value = i['idVenta__idCliente__nombre']
                 ws.cell(row=cont,column=2).value = i['ganancia']
-                ws.cell(row=cont,column=3).value = i['idProducto__count']
+                ws.cell(row=cont,column=3).value = round(i['ganancia']/total *100,2)
                 cont = cont + 1
         #Definimos que el tipo de respuesta a devolver es un archivo de microsoft excel
         response = HttpResponse(content_type="application/ms-excel")

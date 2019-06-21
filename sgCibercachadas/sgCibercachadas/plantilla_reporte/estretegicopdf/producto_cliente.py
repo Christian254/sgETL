@@ -10,12 +10,12 @@ from datetime import datetime
 
 registerFont(TTFont('Arial', 'Arial.ttf'))
 
-def reporte(request,datos,nombre,inicio,fin):
+def reporte(request,datos,nombre,inicio,fin,total):
     ##Esta data nosotros la generaremos con django serán las consultas
     # esta siendo generado aleatoriamente todo lo saqué de un ejemplo de inter y lo fui modificando 
-    data = [("Cliente", "Ganancia", "Porcentaje")] # Este es el encabezado
+    data = [("Cliente", "Ganancia", "porcentaje")] # Este es el encabezado
     for i in datos:
-        data.append((i['idVenta__idCliente__nombre'],'$ {}'.format(i['ganancia']), '% {}'.format(i['idProducto__count'])))
+        data.append((i['idVenta__idCliente__nombre'],'$ {}'.format(i['ganancia']), '% {}'.format(round(i['ganancia']/total*100,2))))
     
     response =HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename={}.pdf'.format(nombre)

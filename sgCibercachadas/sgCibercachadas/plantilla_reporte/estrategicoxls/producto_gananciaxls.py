@@ -17,7 +17,7 @@ def hoja_calculo(request,data,nombre,inicio,fin,total):
         ws.merge_cells('A3:E3')
         #Creamos los encabezados desde la celda B3 hasta la E3
         ws['A5'] = 'Producto'
-        ws['B5'] = 'Cantidad'
+        ws['B5'] = 'Ganancia'
         ws['C5'] = '%'
         #Nos posicionamos en la fila 4 para empezar a escribir
         cont=6
