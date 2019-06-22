@@ -61,7 +61,7 @@ class Kardex(models.Model):
 class ProductoRetorno(models.Model):
     idCliente=models.ForeignKey(Cliente,on_delete=models.CASCADE,db_column='idCliente')
     idProducto=models.ForeignKey(Producto,on_delete=models.CASCADE,db_column='idProducto')
-    idProveedor = models.ForeignKey(Proveedor,on_delete=models.CASCADE,db_column='idProveedor') #Quitar el null después
+    idProveedor = models.ForeignKey(Proveedor,on_delete=models.CASCADE,db_column='idProveedor',null=True) #Quitar el null después
     cantidad=models.IntegerField()
     nombre_cliente=models.CharField(max_length=20)
     nombre_producto=models.CharField(max_length=40)
@@ -84,6 +84,7 @@ class ProductoConsigna(models.Model):
 class ProductoPotencial(models.Model):
     idCliente=models.ForeignKey(Cliente,on_delete=models.CASCADE,db_column='idCliente')
     nombre=models.CharField(max_length=25)
+    fecha=models.DateField(null=True)
     cantidad=models.IntegerField()
 
     def __str__(self):

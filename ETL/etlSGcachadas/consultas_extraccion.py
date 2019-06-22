@@ -47,4 +47,7 @@ lista_extraccion=[extraer_categoria,extraer_proveedor,extraer_inventario,extraer
 ,extraer_producto,extraer_kardex,extraer_detallecompra,extraer_venta,extraer_detalleventa
 ]    
 
+lista_tablas_transaccional=["inventario_categoria","inventario_proveedor","inventario_inventario",'"SIGPAd_cliente"',
+"inventario_compra","inventario_producto","inventario_kardex","inventario_detallecompra","inventario_venta",
+"inventario_detalleventa"]
 
