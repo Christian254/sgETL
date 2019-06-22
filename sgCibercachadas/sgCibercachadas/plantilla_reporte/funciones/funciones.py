@@ -1,7 +1,6 @@
 import itertools
-from itertools import groupby
-from operator import itemgetter
 from reportlab.pdfbase.pdfmetrics import stringWidth
+import pandas as pd
 
 #Funciones para PDF
 def grouper(iterable, n):
@@ -23,10 +22,16 @@ def texto_pdf(c,h, w, cadena,size,y):
     texto.textLine(titulo)
     c.drawText(texto)
 
-def agrupar(lista,llave,campo_sumar):
-        agrupacion = [llave]
-        key = itemgetter(*agrupacion)
-        lista.sort(key=key)
-        lista = [{**dict(zip(agrupacion,k)),campo_sumar:sum(map(itemgetter(campo_sumar),g))}
-        for k,g in groupby(lista,key=key)]
+def agrupar_cliente(lista,llave):
+        lista = (pd.DataFrame(lista)
+        .groupby([llave],as_index=False)
+        .ganancia.sum()
+        .to_dict('r'))
+        return lista
+
+def agrupar_cliente_tactico(lista,llave):
+        lista = (pd.DataFrame(lista)
+        .groupby([llave],as_index=False)
+        .agg({"ganancia":"sum","idProducto__nombre":"first","idProducto__idCategoria__nombre":"first"})
+        .to_dict('r'))
         return lista

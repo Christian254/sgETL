@@ -31,19 +31,21 @@ def reporte(request,datos,nombre,inicio,fin,categoria):
     #titulos
     periodo = "Periodo inicio: {} Periodo Fin: {}".format(inicio,fin)
     texto_pdf(c,h,w,"CiberCachada",14,65)
-    texto_pdf(c,h,w,"Productos más vendidos",12,80)
+    texto_pdf(c,h,w,"Retornos de equipo con garantía",12,80)
     texto_pdf(c,h,w,periodo,12,95)
     if(categoria):
-        data = [("Producto", "Cantidad","Ganancia","Inventario")] # Este es el encabezado
+        data = [("Producto Retornado", "Proveedor","Cantidad")] # Este es el encabezado
         for i in datos:
-            data.append((i['idProducto__nombre'],'{}'.format(i['cantidad__sum']), '$ {}'.format(i['ganancia']),'{}'.format(i['inventario'])))
-        xlist = [x + x_offset for x in [50, 200, 325,440,500]]
+            data.append((i['idProducto__nombre'],'{}'.format(i['idProveedor__razon_social']), '$ {}'.format(i['cantidad__sum'])))
+        xlist = [x + x_offset for x in [50, 275,440,500]]
         ylist = [h - y_offset - i*padding for i in range(max_rows_per_page + 1)]
+
+        
     else:
-        data = [("Producto", "Categoria", "Cantidad","Ganancia","Inventario")] # Este es el encabezado
+        data = [("Producto", "Categoria","Proveedor", "Cantidad")] # Este es el encabezado
         for i in datos:
-            data.append((i['idProducto__nombre'],i['idProducto__idCategoria__nombre'],'{}'.format(i['cantidad__sum']), '$ {}'.format(i['ganancia']),'{}'.format(i['inventario'])))
-        xlist = [x + x_offset for x in [50, 200, 300, 370,440,500]]
+            data.append((i['idProducto__nombre'],i['idProducto__idCategoria__nombre'],i['idProveedor__razon_social'],'{}'.format(i['cantidad__sum'])))
+        xlist = [x + x_offset for x in [50, 200, 330,440,500]]
         ylist = [h - y_offset - i*padding for i in range(max_rows_per_page + 1)]
     
     #Aquí es donde inserta la data

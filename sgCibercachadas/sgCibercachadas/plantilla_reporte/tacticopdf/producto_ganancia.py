@@ -35,13 +35,13 @@ def reporte(request,datos,nombre,inicio,fin,categoria):
     if(categoria):
         data = [("Producto", "Cantidad","Ganancia","Inventario")] # Este es el encabezado
         for i in datos:
-            data.append((i['idProducto__nombre'],'{}'.format(i['cantidad__sum']), '$ {}'.format(i['ganancia'])))
+            data.append((i['idProducto__nombre'],'{}'.format(i['cantidad__sum']), '$ {}'.format(i['ganancia']),'{}'.format(i['inventario'])))
         xlist = [x + x_offset for x in [50, 200, 325,440,500]]
         ylist = [h - y_offset - i*padding for i in range(max_rows_per_page + 1)]
     else:
         data = [("Producto", "Categoria", "Cantidad","Ganancia","Inventario")] # Este es el encabezado
         for i in datos:
-            data.append((i['idProducto__nombre'],i['idProducto__idCategoria__nombre'],'{}'.format(i['cantidad__sum']), '$ {}'.format(i['ganancia'])))
+            data.append((i['idProducto__nombre'],i['idProducto__idCategoria__nombre'],'{}'.format(i['cantidad__sum']), '$ {}'.format(i['ganancia']),'{}'.format(i['inventario'])))
         xlist = [x + x_offset for x in [50, 200, 300, 370,440,500]]
         ylist = [h - y_offset - i*padding for i in range(max_rows_per_page + 1)]
     
