@@ -51,3 +51,8 @@ lista_carga=[carga_categoria,carga_proveedor,carga_inventario,carga_cliente,carg
 lista_tablas_gerencial=["gerencial_categoria","gerencial_proveedor","gerencial_inventario","gerencial_cliente",
 "gerencial_compra","gerencial_producto","gerencial_kardex","gerencial_detallecompra","gerencial_venta",
 "gerencial_detalleventa"]
+
+diccionario_tablas_persistentes={"gerencial_productoconsigna":['"idProducto"','"idCliente"'],
+"gerencial_productopotencial":['"idCliente"'],"gerencial_productoretorno":['"idCliente"','"idProveedor"','"idProducto"']}
+
+tablas_dependencias_persistentes={"gerencial_producto":'"idProducto"',"gerencial_cliente":'"idCliente"',"gerencial_proveedor":'"idProveedor"'}
