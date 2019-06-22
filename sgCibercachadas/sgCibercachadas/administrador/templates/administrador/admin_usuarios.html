@@ -16,7 +16,7 @@ Administración de Usuarios
     <div class="row">
         <div class="col-sm-12 col-md-6">
             <div class="dataTables_length" id="sampleTable_length">
-                    <button class="btn btn-success" type="button"><i class="fa fa-user-plus" aria-hidden="true"></i>Crear Usuario</button>
+                    <a class="btn btn-success"  href="{% url 'administrador:admin_crear_usuarios' %}"><i class="fa fa-user-plus" aria-hidden="true"></i>Crear Usuario</a>
                 </div></div></div>
             <div class="row">
                 <div class="col-sm-12">
@@ -43,7 +43,7 @@ Administración de Usuarios
                             <td>{{ item.email }}</td>
                             <td>
                                 <button class="btn btn-primary" type="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Editar</button>
-                                <button class="btn btn-danger" type="button"><i class="fa fa-user-times" aria-hidden="true"></i>Deshabilitar</button>
+                                <button class="btn btn-warning" type="button"><i class="fa fa-user-times" aria-hidden="true"></i>Deshabilitar</button>
                             </td>
                         </tr>
                     {% endfor %}

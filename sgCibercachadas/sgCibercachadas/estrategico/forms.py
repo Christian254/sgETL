@@ -1,6 +1,7 @@
 from django import forms
 from collections import Counter
 from datetime import datetime
+
 class FechasForm(forms.Form):
     fechainicio=forms.CharField(widget=forms.TextInput(attrs={"name":"fechainicio" ,
     "class":"form-control col-6","placeholder":"Seleccione fecha","autocomplete":"off",}))
