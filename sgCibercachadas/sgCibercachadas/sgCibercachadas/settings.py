@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'gerencial',
     'seguridad',
     'estrategico',
-    'tactico'
+    'tactico',
+    'administrador',
 ]
 
 MIDDLEWARE = [

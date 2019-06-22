@@ -1,0 +1,71 @@
+{% extends 'base/base.html' %}
+{% block head_title %}
+Administración de Usuarios
+{% endblock head_title %}
+{% block titulo_principal %}
+Administración de Usuarios
+{% endblock titulo_principal %}
+{% block mensaje_titulo %}
+Administración de Usuarios
+{% endblock mensaje_titulo %}
+{% block enlace_actual %}
+<a href="{% url 'administrador:admin_gestion_usuarios' %}">Administración de Usuarios</a>
+{% endblock enlace_actual %}
+{% block contenido %}
+<div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="dataTables_length" id="sampleTable_length">
+                    <button class="btn btn-success" type="button"><i class="fa fa-user-plus" aria-hidden="true"></i>Crear Usuario</button>
+                </div></div></div>
+            <div class="row">
+                <div class="col-sm-12">
+            <table class="table table-hover table-bordered dataTable no-footer" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                <thead>
+                  <tr role="row">
+                      <th class="sorting_asc" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-sort="ascending" style="width: 65px;">
+                        Username</th>
+                    <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" style="width: 137px;">
+                        Nombres</th>
+                    <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1"  style="width: 135px;">
+                        Apellidos</th>
+                    <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1"  style="width: 145px;">
+                        Email</th>
+                    <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" style="width: 183px;">
+                        Acciones</th>
+                </thead>
+                <tbody>
+                    {% for item in obj %}
+                        <tr role="row" class="odd">
+                            <td>{{ item.username }}</td>
+                            <td>{{ item.first_name }}</td>
+                            <td>{{ item.last_name }}</td>
+                            <td>{{ item.email }}</td>
+                            <td>
+                                <button class="btn btn-primary" type="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Editar</button>
+                                <button class="btn btn-danger" type="button"><i class="fa fa-user-times" aria-hidden="true"></i>Deshabilitar</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="dataTables_paginate paging_simple_numbers" id="sampleTable_paginate">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li class="paginate_button page-item previous" id="sampleTable_previous">
+                        <a href="?page={{ page_obj.previous_page_number }}" aria-controls="sampleTable" data-dt-idx="0" tabindex="0" class="page-link">
+                            Previous
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                    <li class="paginate_button page-item previous" id="sampleTable_previous">
+                        <a href="?page={{ page_obj.next_page_number }}" aria-controls="sampleTable" data-dt-idx="0" tabindex="0" class="page-link">
+                            Next
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>  
+</div>
+{% endblock contenido %}

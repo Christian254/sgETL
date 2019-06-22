@@ -21,5 +21,5 @@ urlpatterns = [
     path('',include(('general.urls','general'),namespace='general')),
     path('resumen/',include(('estrategico.urls','estrategico'),namespace='estrategico')),
     path('semiresumen/',include(('tactico.urls','tactico'),namespace='tactico')),
-    
+    path('admin/',include(('administrador.urls','administrador'),namespace='administrador')),
 ]
