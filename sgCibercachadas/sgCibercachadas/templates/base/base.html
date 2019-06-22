@@ -101,6 +101,9 @@
                                 {% if perms.gerencial.gestion_usuarios %}
                                 <li><a class="treeview-item" href="{% url 'administrador:admin_gestion_usuarios' %}" ><i class="icon fa fa-circle-o"></i> Listado de Usuarios</a></li>
                                 {% endif %}
+                                {% if perms.gerencial.gestion_usuarios %}
+                                <li><a class="treeview-item" href="{% url 'administrador:admin_crear_usuarios' %}" ><i class="icon fa fa-circle-o"></i> Crear Usuarios</a></li>
+                                {% endif %}
                             </ul>
                         </li>
                         {% endif %}
