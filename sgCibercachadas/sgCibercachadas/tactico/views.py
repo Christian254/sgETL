@@ -9,7 +9,7 @@ from datetime import datetime
 from gerencial.models import *
 from django.db.models import Sum,Count,Q
 from estrategico.forms import  FechasForm
-from plantilla_reporte.tacticopdf import producto_vendido, producto_ganancia,producto_retorno,producto_cliente
+from plantilla_reporte.tacticopdf import producto_vendido, producto_ganancia,producto_retorno,producto_cliente,producto_consigna
 from plantilla_reporte.tacticoxls import producto_vendidoxls, producto_gananciaxls,producto_retornoxls
 from plantilla_reporte.funciones.funciones import agrupar_cliente_tactico
 import operator
@@ -209,12 +209,19 @@ class RetornoEnConsignaView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
         fin = request.POST.get('fechafin',None)
         tipo = int(request.POST.get('tipo',None))
 
+        fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
+        fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d')
+
+        fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
+        fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d')
+
+        consigna = list(ProductoConsigna.objects.filter(fechaFin__gte=fecha_fin).values('idProducto__nombre','idProducto__idCategoria__nombre','fechaInicio','fechaFin','idCliente__nombre').annotate(Sum('cantidad')))
+        consigna.sort(key=producto_consigna.clave_orden,reverse=True)
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            nota =[]
-            return plantilla_reporte(request,nota,'prueba')
+            return producto_consigna.reporte(request,consigna,'producto_consigna',inicio,fin)
         elif(tipo==3):
             nota = []
             return hoja_calculo(request,nota,'prueba')

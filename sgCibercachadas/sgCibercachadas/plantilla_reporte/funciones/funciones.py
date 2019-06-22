@@ -12,7 +12,7 @@ def insert_data_pdf(data, max_rows_per_page,xlist,ylist,c,padding):
         c.grid(xlist, ylist[:len(rows) + 1])
         for y, row in zip(ylist[:-1], rows):
             for x, cell in zip(xlist, row):
-                c.drawString(x + 2, y - padding + 3, cell)
+                c.drawString(x + 2, y - padding + 3, str(cell))
         c.showPage()
 
 def texto_pdf(c,h, w, cadena,size,y):    
