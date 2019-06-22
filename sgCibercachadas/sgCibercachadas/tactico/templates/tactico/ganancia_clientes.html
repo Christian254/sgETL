@@ -35,14 +35,13 @@ Este es el resumen
                         <label class="control-label " id="label_custom_categoria">Cliente</label>
                     </div>
                     <div class="col-3">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Busque al cliente">
-                            <div class="input-group-append">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
+                        <select name="cliente" id="inputState" class="form-control">
+                            <option selected value="">Todos</option>                            
+                            {% for c in venta_cliente  %}
+                            <option value="{{c.idVenta__idCliente}}">{{c.idVenta__idCliente__apellido}}, {{c.idVenta__idCliente__nombre}}</option>
+                            {% endfor %}                               
+                            
+                        </select>
                     </div>
                 </div>
             </div>

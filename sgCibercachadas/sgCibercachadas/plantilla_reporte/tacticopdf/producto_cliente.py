@@ -10,7 +10,7 @@ from datetime import datetime
 
 registerFont(TTFont('Arial', 'Arial.ttf'))
 
-def reporte(request,datos,nombre,inicio,fin,categoria):
+def reporte(request,datos,nombre,inicio,fin,cliente):
     ##Esta data nosotros la generaremos con django serán las consultas
     # esta siendo generado aleatoriamente todo lo saqué de un ejemplo de inter y lo fui modificando 
    
@@ -31,21 +31,21 @@ def reporte(request,datos,nombre,inicio,fin,categoria):
     #titulos
     periodo = "Periodo inicio: {} Periodo Fin: {}".format(inicio,fin)
     texto_pdf(c,h,w,"CiberCachada",14,65)
-    texto_pdf(c,h,w,"Productos más vendidos",12,80)
+    texto_pdf(c,h,w,"Clientes que generaron mayor ganancia",12,80)
     texto_pdf(c,h,w,periodo,12,95)
-    if(categoria):
-        data = [("Producto", "Cantidad","Ganancia","Inventario")] # Este es el encabezado
+    if(not cliente):
+        data = [("Cliente", "Producto Destacado","Categoria Destacada", "Ganancia")] # Este es el encabezado
         for i in datos:
-            data.append((i['idProducto__nombre'],'{}'.format(i['cantidad__sum']), '$ {}'.format(i['ganancia']),'{}'.format(i['inventario'])))
-        xlist = [x + x_offset for x in [50, 200, 325,440,500]]
+            data.append((i['idVenta__idCliente__nombre'],i['idProducto__nombre'],i['idProducto__idCategoria__nombre'],'${}'.format(i['ganancia'])))
+        xlist = [x + x_offset for x in [0, 150, 315,430,500]]
         ylist = [h - y_offset - i*padding for i in range(max_rows_per_page + 1)]
     else:
-        data = [("Producto", "Categoria", "Cantidad","Ganancia","Inventario")] # Este es el encabezado
+        texto_pdf(c,h,w,'Cliente: {}'.format(datos[0]['idVenta__idCliente__nombre']),12,110)
+        data = [("Fecha", "Producto Destacado","Categoria", "Ganancia")] # Este es el encabezado
         for i in datos:
-            data.append((i['idProducto__nombre'],i['idProducto__idCategoria__nombre'],'{}'.format(i['cantidad__sum']), '$ {}'.format(i['ganancia']),'{}'.format(i['inventario'])))
-        xlist = [x + x_offset for x in [50, 200, 300, 370,440,500]]
-        ylist = [h - y_offset - i*padding for i in range(max_rows_per_page + 1)]
-    
+            data.append((datetime.strftime(i['idVenta__fecha_hora'], '%d/%m/%Y'),i['idProducto__nombre'],i['idProducto__idCategoria__nombre'],'${}'.format(i['ganancia'])))
+        xlist = [x + x_offset for x in [0, 100, 315,430,500]]
+        ylist = [h - y_offset - i*padding for i in range(max_rows_per_page + 1)]        
     #Aquí es donde inserta la data
     insert_data_pdf(data, max_rows_per_page,xlist,ylist,c,padding)
     
@@ -56,4 +56,4 @@ def reporte(request,datos,nombre,inicio,fin,categoria):
     return response
 
 def clave_orden(e):
-    return e['cantidad__sum']
+    return e['ganancia']

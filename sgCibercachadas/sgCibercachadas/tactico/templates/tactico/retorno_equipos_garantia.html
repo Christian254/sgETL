@@ -34,9 +34,13 @@ Este es el Semiresumen
                         <label class="control-label " id="label_custom_categoria">Categoria</label>
                     </div>
                     <div class="col-3">
-                        <select id="inputState" class="form-control">
-                            <option selected>Elegir Categoria</option>
-                            <option>...</option>
+                        <select name="categoria" id="inputState" class="form-control">
+                            <option selected value="">Todas las Categorias</option>
+                            
+                            {% for c in categoria  %}
+                            <option value="{{c.nombre}}">{{c.nombre}}</option>
+                            {% endfor %}                               
+                            
                         </select>
                     </div>
                 </div>

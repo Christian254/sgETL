@@ -9,7 +9,7 @@ from datetime import datetime,timezone
 from gerencial.models import *
 from django.db.models import Sum,Count,Q
 from estrategico.forms import  FechasForm
-from plantilla_reporte.funciones.funciones import agrupar
+from plantilla_reporte.funciones.funciones import agrupar_cliente
 import operator
 
 # Create your views here.
@@ -54,7 +54,8 @@ class ProductosGeneranGananciasView(LoginRequiredMixin,PermissionRequiredMixin,g
             if(prod):
                 det['costo'] = prod.precExistencia
             else:
-                det['costo'] = 0        
+                det['costo'] = 0
+
             det['ganancia'] = det['total__sum'] - det['cantidad__sum'] * det['costo']
             total_ganancia += det['ganancia']
         detalle_venta.sort(key=producto_ganancia.clave_orden, reverse=True)
@@ -148,7 +149,7 @@ class ProductosGananciasClientesView(LoginRequiredMixin,PermissionRequiredMixin,
             det['ganancia'] = det['total__sum'] - det['cantidad__sum'] * det['costo']
             total_ganancia += det['ganancia']
 
-        cliente_agrupado = agrupar(detalle_cliente,'idVenta__idCliente__nombre','ganancia')
+        cliente_agrupado = agrupar_cliente(detalle_cliente,'idVenta__idCliente__nombre')
         cliente_agrupado.sort(key=producto_ganancia.clave_orden,reverse=True)
         
         if(tipo==1):
