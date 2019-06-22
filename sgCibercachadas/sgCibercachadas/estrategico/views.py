@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.views import generic
-from plantilla_reporte.estretegicopdf import producto_ganancia,producto_cliente,producto_vendido
+from plantilla_reporte.estretegicopdf import producto_ganancia,producto_cliente,producto_vendido,producto_potencial
 from plantilla_reporte.estrategicoxls import producto_gananciaxls,producto_clientexls,producto_vendidoxls
 from django.contrib import messages
 from django.utils import timezone
@@ -9,7 +9,7 @@ from datetime import datetime,timezone
 from gerencial.models import *
 from django.db.models import Sum,Count,Q
 from estrategico.forms import  FechasForm
-from plantilla_reporte.funciones.funciones import agrupar_cliente
+from plantilla_reporte.funciones.funciones import agrupar_cliente,agrupar_producto_potencial
 import operator
 
 # Create your views here.
@@ -92,14 +92,23 @@ class ProductosPotencialesView(LoginRequiredMixin,PermissionRequiredMixin,generi
 
         inicio=request.POST.get("fechainicio",None)
         fin=request.POST.get("fechafin",None)
-        tipo=request.POST.get("tipo",None)
+        tipo=int(request.POST.get("tipo",None))
 
+        fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
+        fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d')
+
+        fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
+        fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d')
+
+        potencial = list(ProductoPotencial.objects.filter(fecha__range=(fecha_inicio,fecha_fin)).values('nombre','cantidad','idCliente__nombre'))
+        potencial=agrupar_producto_potencial(potencial)
+        potencial.sort(key=producto_potencial.clave_orden,reverse=True)
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
             nota =[]
-            return plantilla_reporte(request,nota,'prueba')
+            return producto_potencial.reporte(request,potencial,'producto_potencial',inicio,fin)
         elif(tipo==3):
             nota = []
             return hoja_calculo(request,nota,'prueba')

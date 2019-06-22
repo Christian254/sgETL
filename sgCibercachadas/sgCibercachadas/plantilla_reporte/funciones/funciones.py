@@ -1,7 +1,6 @@
 import itertools
 from reportlab.pdfbase.pdfmetrics import stringWidth
 import pandas as pd
-
 #Funciones para PDF
 def grouper(iterable, n):
     args = [iter(iterable)] * n
@@ -13,7 +12,7 @@ def insert_data_pdf(data, max_rows_per_page,xlist,ylist,c,padding):
         c.grid(xlist, ylist[:len(rows) + 1])
         for y, row in zip(ylist[:-1], rows):
             for x, cell in zip(xlist, row):
-                c.drawString(x + 2, y - padding + 3, str(cell))
+                c.drawString(x + 2, y - padding + 3, cell)
         c.showPage()
 
 def texto_pdf(c,h, w, cadena,size,y):    
@@ -33,5 +32,12 @@ def agrupar_cliente_tactico(lista,llave):
         lista = (pd.DataFrame(lista)
         .groupby([llave],as_index=False)
         .agg({"ganancia":"sum","idProducto__nombre":"first","idProducto__idCategoria__nombre":"first"})
+        .to_dict('r'))
+        return lista
+
+def agrupar_producto_potencial(lista):
+        lista = (pd.DataFrame(lista)
+        .groupby(['nombre'],as_index=False)
+        .agg({"cantidad":"sum","idCliente__nombre":"-".join})
         .to_dict('r'))
         return lista
