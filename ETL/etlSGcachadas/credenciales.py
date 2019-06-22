@@ -1,4 +1,4 @@
-
+#!/usr/bin/python
 
 postgres_config_sg = {
     'user': 'usuario',

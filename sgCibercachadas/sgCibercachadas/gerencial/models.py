@@ -107,7 +107,31 @@ class DetalleVenta(models.Model):
     
     def __str__(self):
         return str(self.idVenta)+" - "+str(self.idProducto)
-    
+
+class ProductoPotencialHistorico(models.Model):
+    idCliente=models.IntegerField(db_column='idCliente')
+    nombre=models.CharField(max_length=25)
+    fecha=models.DateField(null=True)
+    cantidad=models.IntegerField()
+
+class ProductoConsignaHistorico(models.Model):
+    idCliente=models.IntegerField(db_column='idCliente')
+    idProducto=models.IntegerField(db_column='idProducto')
+    cantidad=models.IntegerField()
+    fechaInicio=models.DateField()
+    fechaFin=models.DateField()
+
+class ProductoRetornoHistorico(models.Model):
+    idCliente=models.IntegerField(db_column='idCliente')
+    idProducto=models.IntegerField(db_column='idProducto')
+    idProveedor = models.IntegerField(db_column='idProveedor') 
+    cantidad=models.IntegerField()
+    nombre_cliente=models.CharField(max_length=20)
+    nombre_producto=models.CharField(max_length=40)
+    codigo=models.CharField(max_length=10)
+    fecha=models.DateField()
+
+
 class PermisosSoporte(models.Model):
     class Meta:
         managed=False
@@ -127,5 +151,4 @@ class PermisosSoporte(models.Model):
             ('gestion_usuarios','Administrador'),
             ('actualizar_admin','Delegado')
         )
-
 

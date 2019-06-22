@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #tablas de catalogo
 carga_categoria = ('''
   INSERT INTO gerencial_categoria(id,nombre) values ( %s ,%s )

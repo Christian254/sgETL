@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #tablas de catalogo
 extraer_categoria = ('''
     SELECT id,nombre from inventario_categoria
