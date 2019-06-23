@@ -1,0 +1,170 @@
+{% extends 'base/base.html' %}
+{% block head_title %}
+ETL
+{% endblock head_title %}
+{% block titulo_principal %}
+Sección de carga del ETL
+{% endblock titulo_principal %}
+{% block mensaje_titulo %}
+Aqui se puede realizar la carga de archivos ademas la ejecución manual del ETL para la extraccion de registros de la base de datos 
+transaccional
+{% endblock mensaje_titulo %}
+{% block enlace_actual %}
+<a href="{% url 'etl:carga_menu' %}">Seccion ETL</a>
+{% endblock enlace_actual %}
+{% block contenido %}
+{% if messages %}
+{% for message in messages %}
+<li{% if message.tags %} class="alert alert-{{ message.tags }} text-center" {% endif %}>
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+    {{ message }}
+    </li>
+    {% endfor %}
+  {% endif %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="tile" >
+            <div class="overlay" id="loading_etl" style="display:none">
+                <div class="m-loader mr-4">
+                  <svg class="m-circular" viewBox="25 25 50 50">
+                    <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="4" stroke-miterlimit="10"></circle>
+                  </svg>
+                </div>
+                <h3 class="l-text">Ejecutando ETL...</h3>
+              </div>
+                <h3 class="tile-title">ETL</h3>
+                <div class="tile-body">
+                    Cargar los datos de los registros en las tablas necesarias
+                    de la base de datos transaccional a la base de datos que usa este
+                    sistema informatico
+                </div>
+                <div class="tile-footer">
+                    <form action="{% url 'etl:etl_bd' %}" method="post">
+                        {% csrf_token %}
+                    <div class="text-center">
+                        <button class="btn btn-outline-primary " id='etl_button' type="submit">Ejecutar ETL</button>
+                    </div>
+                    </form>
+                </div>
+              </div>
+            </div>
+<div class="col-md-6">
+    <div class="tile">
+        <div class="overlay" id="loading_retorno" style="display:none">
+            <div class="m-loader mr-4">
+              <svg class="m-circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="4" stroke-miterlimit="10"></circle>
+              </svg>
+            </div>
+            <h3 class="l-text">Cargando archivo productos retornos...</h3>
+          </div>
+
+    <div class="tile-title-w-btn">
+      <h3 class="title">Retorno de productos</h3>
+      <div class="btn-group">
+          <a class="btn btn-success" href="#">Formato Ejemplo  <i class="fa fa-lg fa-file-excel-o "></i></a></div>
+    </div>
+    <div class="tile-body">
+        Cargar los datos de los productos retornados por los clientes, en un formato .csv para dejarlos almacenados en la base de datos que usa este sistema
+        informatico
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+        <input class="form-control" type="file" name="file" >
+    </div>
+    <div class="tile-footer">
+      <div class="text-center">
+          <button class="btn btn-outline-primary " id="retorno" type="submit">Ejecutar Carga</button>
+        </form>   
+      </div>
+  </div>
+  </div>
+</div>
+  <div class="col-md-6">
+  <div class="tile">
+      <div class="overlay" id="loading_potencial" style="display:none">
+          <div class="m-loader mr-4">
+            <svg class="m-circular" viewBox="25 25 50 50">
+              <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="4" stroke-miterlimit="10"></circle>
+            </svg>
+          </div>
+          <h3 class="l-text">Cargando archivo productos potenciales</h3>
+        </div>
+    <div class="tile-title-w-btn">
+      <h3 class="title">Productos potenciales</h3>
+      <div class="btn-group">
+                    <a class="btn btn-success" href="#">Formato Ejemplo  <i class="fa fa-lg fa-file-excel-o "></i></a></div>
+    </div>
+    <div class="tile-body">
+      Cargar los datos de los productos potenciales, en un formato .csv para dejarlos almacenados en la base de datos que usa este sistema
+      informatico      
+      <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+      <input class="form-control" type="file" name="file" >
+
+    </div>
+    <div class="tile-footer">
+      <div class="text-center">
+          <button class="btn btn-outline-primary " id="potencial" type="submit">Ejecutar Carga</button>
+      </form>
+        </div>
+  </div>
+  </div>
+</div>
+
+<div class="col-md-6">
+  <div class="tile">
+      <div class="overlay" id="loading_consigna" style="display:none">
+          <div class="m-loader mr-4">
+            <svg class="m-circular" viewBox="25 25 50 50">
+              <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="4" stroke-miterlimit="10"></circle>
+            </svg>
+          </div>
+          <h3 class="l-text">Cargando archivo productos en consigna.</h3>
+        </div>
+    <div class="tile-title-w-btn">
+      <h3 class="title">Productos en consigna</h3>
+      <div class="btn-group">
+                <a class="btn btn-success" href="#">Formato Ejemplo  <i class="fa fa-lg fa-file-excel-o "></i></a></div>
+    </div>
+    <div class="tile-body">
+      Cargar los datos de los productos en estado consigna, en un formato .csv para dejarlos almacenados en la base de datos que usa este sistema
+      informatico        
+      <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+      <input class="form-control" type="file" name="file" >
+    
+    </div>
+    <div class="tile-footer">
+      <div class="text-center">
+          <button class="btn btn-outline-primary " id="consigna" type="submit">Ejecutar carga</button>
+      </form>
+      </div>
+  </div>
+  </div>
+</div>
+</div>
+{% endblock contenido %}
+
+
+{% block plugins %}
+<script>
+let submitETL=document.getElementById("etl_button")
+let submitRetorno= document.getElementById("retorno")
+let submitPotencial= document.getElementById("potencial")
+let submitConsigna= document.getElementById("consigna")
+
+let loadingETL= document.getElementById("loading_etl")
+let loadingRetorno= document.getElementById("loading_retorno")
+let loadingPotencial= document.getElementById("loading_potencial")
+let loadingConsigna=document.getElementById("loading_consigna")
+
+//se ejecuta loading despues de 0.7 segundos
+submitETL.addEventListener('click',function(ev){
+  setTimeout(function(){
+    submitETL.setAttribute("style","display:none")
+    loadingETL.style.display="inline-flex"
+  },700)
+
+})
+</script>
+{% endblock plugins %}

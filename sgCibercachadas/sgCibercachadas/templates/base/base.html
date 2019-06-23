@@ -96,7 +96,7 @@
                         </li>
                         {% endif %}
                         {% if request.user|has_group:"Administrador" %} 
-                        <li class="treeview "><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-folder-open-o"></i><span class="app-menu__label">Gestión de Usuarios</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+                        <li class="treeview "><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-users"></i><span class="app-menu__label">Gestión de Usuarios</span><i class="treeview-indicator fa fa-angle-right"></i></a>
                             <ul class="treeview-menu">
                                 {% if perms.gerencial.gestion_usuarios %}
                                 <li><a class="treeview-item" href="{% url 'administrador:admin_gestion_usuarios' %}" ><i class="icon fa fa-circle-o"></i> Listado de Usuarios</a></li>
@@ -106,7 +106,11 @@
                                 {% endif %}
                             </ul>
                         </li>
+                        <li>
+                            <a class="app-menu__item " href="{% url 'etl:carga_menu'%}"><i class="app-menu__icon fa fa-database"></i><span class="app-menu__label">ETL</span></a>
+                        </li>
                         {% endif %}
+                        
                     </ul>
 
 

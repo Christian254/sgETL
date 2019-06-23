@@ -22,4 +22,5 @@ urlpatterns = [
     path('resumen/',include(('estrategico.urls','estrategico'),namespace='estrategico')),
     path('semiresumen/',include(('tactico.urls','tactico'),namespace='tactico')),
     path('admin/',include(('administrador.urls','administrador'),namespace='administrador')),
+    path('etl/',include(('etl.urls','etl'),namespace='etl'))
 ]

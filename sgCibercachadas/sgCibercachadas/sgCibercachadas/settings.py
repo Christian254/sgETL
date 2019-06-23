@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'estrategico',
     'tactico',
     'administrador',
+    'etl'
 ]
 
 MIDDLEWARE = [

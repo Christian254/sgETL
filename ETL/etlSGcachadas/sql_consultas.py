@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from consultas_carga import lista_carga,lista_tablas_gerencial as nombre_tablas
 from consultas_extraccion import lista_extraccion, lista_tablas_transaccional as nombre_tabla_trans
 
