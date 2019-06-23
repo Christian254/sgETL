@@ -41,3 +41,12 @@ def agrupar_producto_potencial(lista):
         .agg({"cantidad":"sum","idCliente__nombre":"-".join})
         .to_dict('r'))
         return lista
+
+def agrupar_cliente_frecuente(lista):
+        lista = (pd.DataFrame(lista)
+        .groupby(['idVenta__idCliente__nombre'],as_index=False)
+        #Se cuenta las veces que un idCliente aparece en ventas para saber cuantas nos visto
+        .agg({"cantidad__sum":"sum","idVenta__fecha_hora":"last","idVenta__idCliente":"count"}) 
+        .to_dict('r'))
+        return lista
+        

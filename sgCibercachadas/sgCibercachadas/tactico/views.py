@@ -9,9 +9,9 @@ from datetime import datetime
 from gerencial.models import *
 from django.db.models import Sum,Count,Q
 from estrategico.forms import  FechasForm
-from plantilla_reporte.tacticopdf import producto_vendido, producto_ganancia,producto_retorno,producto_cliente,producto_consigna
+from plantilla_reporte.tacticopdf import producto_vendido, producto_ganancia,producto_retorno,producto_cliente,producto_consigna,cliente_frecuente
 from plantilla_reporte.tacticoxls import producto_vendidoxls, producto_gananciaxls,producto_retornoxls
-from plantilla_reporte.funciones.funciones import agrupar_cliente_tactico
+from plantilla_reporte.funciones.funciones import agrupar_cliente_tactico, agrupar_cliente_frecuente
 import operator
 
 # Create your views here.
@@ -279,7 +279,6 @@ class ClientesGananciaView(LoginRequiredMixin,PermissionRequiredMixin,generic.Te
 
         detalle_cliente.sort(key=producto_cliente.clave_orden,reverse=True)
         cliente_agrupado = agrupar_cliente_tactico(detalle_cliente,'idVenta__idCliente__nombre')
-        print(cliente_agrupado)
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
@@ -316,13 +315,20 @@ class ClientesFrecuentesView(LoginRequiredMixin,PermissionRequiredMixin,generic.
         inicio = request.POST.get('fechainicio',None)
         fin = request.POST.get('fechafin',None)
         tipo = int(request.POST.get('tipo',None))
+        fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
+        fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d %H:%M:%S')
 
+        fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
+        fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d %H:%M:%S')
+        #Consulta
+        detalle_cliente = list(DetalleVenta.objects.filter(Q(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin))&Q(idVenta__idCliente__isnull=False)).values('idVenta__idCliente__nombre','idVenta__fecha_hora','idVenta__idCliente').annotate(Sum('cantidad'),Sum('total')))
+        frecuente = agrupar_cliente_frecuente(detalle_cliente)
+        frecuente.sort(key=cliente_frecuente.clave_orden,reverse=True)
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            nota =[]
-            return plantilla_reporte(request,nota,'prueba')
+            return cliente_frecuente.reporte(request,frecuente,'cliente_frecuente',inicio,fin)
         elif(tipo==3):
             nota = []
             return hoja_calculo(request,nota,'prueba')
