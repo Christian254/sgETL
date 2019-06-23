@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load staticfiles %} 
 {% block head_title %}
     Inicio del Sitio
 {% endblock head_title %}
@@ -12,5 +13,110 @@
 <a href="/">Home</a>
 {% endblock enlace_actual %}
 {% block contenido %} 
-    Bienvenido al home de la aplicacion 
+{% if user.is_authenticated %}
+<div class="alert alert-info">
+        <strong>Bienvenido al Sistema de la Clinica </strong>Indicaciones para {{user.first_name}} {{user.last_name}} con perfil de acceso: {{user.groups.first}}
+</div>
+        
+    <section class="mbr-section mbr-section--relative mbr-section--fixed-size" id="features1-12" style="background-color:	#F0F8FF ">
+            <div class="mbr-section__container container mbr-section__container--std-top-padding" style="padding-top: 20px;">
+                <div class="mbr-section__row row">
+                    <div class="mbr-section__col col-xs-12 col-md-4 col-sm-6">
+                        <div class="mbr-section__container mbr-section__container--center mbr-section__container--middle">
+                            <figure class="mbr-figure"><img src="{% static 'img/user2.png' %}" style="width: 200px; height: 200px;" class="mbr-figure__img"></figure>
+                        </div>
+                        <div class="mbr-section__container mbr-section__container--middle">
+                            <div class="mbr-header mbr-header--reduce mbr-header--center mbr-header--wysiwyg">
+                                <h3 class="mbr-header__text_manejo">Información</h3>
+                            </div>
+                        </div>
+                        <div class="mbr-section__container mbr-section__container--middle">
+                            <div class="mbr-article mbr-article--wysiwyg">
+                                <p> le damos la bienvenida al Sistema de Información Gerencial para el apoyo al área de ventas de la empresa “CiberCachada”.
+                                    Los Reportes se dividen entre SemiResumen y Resumen que ayuda a los usuarios estrategicos y tacticos a tomar decisiones
+                                    sobre las ventas y beneficios otorgados a los clientes y los productos que pueden generar mayor ganancia y beneficio
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <div class="mbr-section__col col-xs-12 col-md-4 col-sm-6">
+                        <div class="mbr-section__container mbr-section__container--center mbr-section__container--middle">
+                            <figure class="mbr-figure"><img src="{% static 'img/user3.png' %}" style="width: 200px; height: 200px;" class="mbr-figure__img"></figure>
+                        </div>
+                        <div class="mbr-section__container mbr-section__container--middle">
+                            <div class="mbr-header mbr-header--reduce mbr-header--center mbr-header--wysiwyg">
+                                <h3 class="mbr-header__text_manejo">Permisos  </h3>
+                            </div>
+                        </div>
+                        <div class="mbr-section__container mbr-section__container--middle">
+                            <p>Acciones que puede realizar</p>
+                            <div class="mbr-article mbr-article--wysiwyg">
+                                {% if perms.gerencial.resumen_productos_ganancias %}
+                                <a class="btn btn-primary " href="{% url 'estrategico:re_producto_generan_ganancias' %}" style="margin-bottom: 0.5em;"><i class="fa fa-book" aria-hidden="true"></i>Productos con Ganancias</a>                               
+                                {% endif %}
+                                {% if perms.gerencial.resumen_productos_potenciales %}
+                                <a class="btn btn-primary " href="{% url 'estrategico:re_producto_potenciales' %}" style="margin-bottom: 0.5em;"><i class="fa fa-book" aria-hidden="true"></i>Productos Potenciales</a>                               
+                                {% endif %}
+                                {% if perms.gerencial.resumen_ganancias_clientes %}
+                                <a class="btn btn-primary" href="{% url 'estrategico:re_producto_ganancias_clientes' %}" style="margin-bottom: 0.5em;"><i class="fa fa-book" aria-hidden="true"></i>Ganancias de Clientes</a>                               
+                                {% endif %}
+                                {% if perms.gerencial.resumen_productos_vendidos %}
+                                <a class="btn btn-primary" href="{% url 'estrategico:re_producto_vendido' %}" style="margin-bottom: 0.5em;"><i class="fa fa-book" aria-hidden="true"></i> Productos mas Vendidos</a>                               
+                                {% endif %}
+                                {% if perms.gerencial.resumen_tardanzas_productos %}
+                                <a class="btn btn-primary" href="{% url 'estrategico:re_producto_tardanza_productos' %}" style="margin-bottom: 0.5em;"><i class="fa fa-book" aria-hidden="true"></i>Tardanza de Productos</a>                               
+                                {% endif %}
+
+
+                                {% if perms.gerencial.semi_productos_vendidos %}
+                                <a class="btn btn-info " href="{% url 'tactico:semire_producto_mas_vendidos' %}" style="margin-bottom: 0.5em;"><i class="fa fa-book" aria-hidden="true"></i>Productos mas Vendidos</a>                               
+                                {% endif %}
+                                {% if perms.gerencial.semi_productos_ganancias %}
+                                <a class="btn btn-info " href="{% url 'tactico:semire_producto_generan_ganancia' %}" style="margin-bottom: 0.5em;"><i class="fa fa-book" aria-hidden="true"></i>Productos Generan Ganancia</a>                               
+                                {% endif %}
+                                {% if perms.gerencial.semi_retornos_equipos %}
+                                <a class="btn btn-info " href="{% url 'tactico:semire_retorno_equipos_garantia' %}" style="margin-bottom: 0.5em;"><i class="fa fa-book" aria-hidden="true"></i>Retorno de equipos</a>                               
+                                {% endif %}
+                                {% if perms.gerencial.semi_productos_consigna %}
+                                <a class="btn btn-info " href="{% url 'tactico:semire_productos_consigna' %}" style="margin-bottom: 0.5em;"><i class="fa fa-book" aria-hidden="true"></i>Productos en Consigna</a>                               
+                                {% endif %}
+                                {% if perms.gerencial.semi_ganancias_clientes %}
+                                <a class="btn btn-info " href="{% url 'tactico:semire_clientes_ganancia' %}" style="margin-bottom: 0.5em;"><i class="fa fa-book" aria-hidden="true"></i>Ganancias de Clientes</a>                               
+                                {% endif %}
+                                {%if perms.gerencial.semi_clientes_frecuentes %}
+                                <a class="btn btn-info " href="{% url 'tactico:semire_clientes_frecuentes' %}" style="margin-bottom: 0.5em;"> <i class="fa fa-book" aria-hidden="true"></i>Clientes Frecuentes</a>                               
+                                {% endif %}
+
+                                {% if perms.gerencial.gestion_usuarios %}
+                                <a class="btn btn-outline-secondary " href="{% url 'administrador:admin_gestion_usuarios' %}" style="margin-bottom: 0.5em;"><i class="fa fa-users" aria-hidden="true"></i>Gestión de Usuarios</a>                               
+                                {% endif %}
+                                {% if perms.gerencial.gestion_usuarios %}
+                                <a class="btn btn-outline-secondary " href="{% url 'etl:carga_menu'%}" style="margin-bottom: 0.5em;"><i class="fa fa-database" aria-hidden="true"></i>Extract, Transform and Load </a>                               
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix visible-sm-block"></div>
+                    <div class="mbr-section__col col-xs-12 col-md-4 col-sm-6">
+                        <div class="mbr-section__container mbr-section__container--center mbr-section__container--middle">
+                            <figure class="mbr-figure"><img src="{% static 'img/management.jpg' %}"style="width: 200px; height: 200px;" class="mbr-figure__img"></figure>
+                        </div>
+                        <div class="mbr-section__container mbr-section__container--middle">
+                            <div class="mbr-header mbr-header--reduce mbr-header--center mbr-header--wysiwyg">
+                                <h3 class="mbr-header__text_manejo">Objetivos del Sistema</h3>
+                            </div>
+                        </div>
+                        <div class="mbr-section__container mbr-section__container--middle">
+                            <div class="mbr-article mbr-article--wysiwyg">
+                                <p>Sistema Gerencial que espera ayudar a la administración para mejorar sus ventas </p>
+                                <p>Sistema de información gerencial para el área de ventas de la empresa “Ciber Cachada” para facilitar la toma de decisiones del nivel táctico y estratégico. </p>
+                            </div>
+                        </div>
+                    </div>
+        
+                    
+         </div>
+    </section>
+{% endif %}
 {% endblock contenido %}

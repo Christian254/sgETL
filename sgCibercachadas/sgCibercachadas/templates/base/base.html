@@ -1,4 +1,5 @@
 {% load static %}
+
 {% load helpers %}
 <!DOCTYPE html>
 <html lang="es">
@@ -28,6 +29,7 @@
                 <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
                     <ul class="dropdown-menu settings-menu dropdown-menu-right">
                         <li><a class="dropdown-item" href="#"><i class="fa fa-user fa-lg"></i> Perfil</a></li>
+                        <li><a class="dropdown-item" href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
                         <li><a class="dropdown-item" href="{% url 'general:logout' %}"><i class="fa fa-sign-out fa-lg"></i> Cerrar sesión</a></li>
                     </ul>
                 </li>
@@ -41,13 +43,13 @@
               <aside class="app-sidebar">
                   <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="{% static '/img/user.png' %}" alt="User Image">
                     <div>
-                      <p class="app-sidebar__user-name">{{user.last_name}} {{user.first_name}}</p>
+                      <p class="app-sidebar__user-name">{{user.username}}</p>
                       <p class="app-sidebar__user-designation">{{user.groups.first| default_if_none:"" }}</p>
                     </div>
                   </div>
-
+                  <ul class="app-menu">
                     {% if request.user|has_group:"Estrategico" %} 
-                    <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-folder-open-o"></i><span class="app-menu__label">Reportes Estrategicos</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+                        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-folder-open-o"></i><span class="app-menu__label">Reportes Estrategicos</span><i class="treeview-indicator fa fa-angle-right"></i></a>
                             <ul class="treeview-menu">
 
                               {% if perms.gerencial.resumen_productos_ganancias %}                     
@@ -96,21 +98,20 @@
                         </li>
                         {% endif %}
                         {% if request.user|has_group:"Administrador" %} 
-                        <li class="treeview "><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-users"></i><span class="app-menu__label">Gestión de Usuarios</span><i class="treeview-indicator fa fa-angle-right"></i></a>
-                            <ul class="treeview-menu">
+                       
+                        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">Gestión de Usuarios</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+                          <ul class="treeview-menu">
                                 {% if perms.gerencial.gestion_usuarios %}
                                 <li><a class="treeview-item" href="{% url 'administrador:admin_gestion_usuarios' %}" ><i class="icon fa fa-circle-o"></i> Listado de Usuarios</a></li>
                                 {% endif %}
                                 {% if perms.gerencial.gestion_usuarios %}
                                 <li><a class="treeview-item" href="{% url 'administrador:admin_crear_usuarios' %}" ><i class="icon fa fa-circle-o"></i> Crear Usuarios</a></li>
                                 {% endif %}
-                            </ul>
+                          </ul>
                         </li>
-                        <li>
-                            <a class="app-menu__item " href="{% url 'etl:carga_menu'%}"><i class="app-menu__icon fa fa-database"></i><span class="app-menu__label">ETL</span></a>
-                        </li>
+                        <li><a class="app-menu__item" href="{% url 'etl:carga_menu'%}"><i class="app-menu__icon fa fa-database"></i><span class="app-menu__label">ETL</span></a></li>
                         {% endif %}
-                        
+                       
                     </ul>
 
 

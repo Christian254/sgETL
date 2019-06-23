@@ -2,9 +2,9 @@
     {
         "model": "auth.user",
         "fields": {
-            "username":"estrategico",
-            "first_name": "Usuario",
-            "last_name": "Estrategico",
+            "username":"Yaneth94",
+            "first_name": "Zoila",
+            "last_name": "Villatoro Garcia",
             "password":"pbkdf2_sha256$150000$2QoRqQumA4Ot$4PSIJ8cJU/f9F2/XuSaJmeyf5chR4RYxxqEu6TrPtDQ=",
             "is_superuser":false,
             "groups":[1]
@@ -14,9 +14,9 @@
     {
         "model": "auth.user",
         "fields": {
-            "username":"tactico",
-            "first_name": "Usuario",
-            "last_name": "Tactico",
+            "username":"Christian123",
+            "first_name": "Christian",
+            "last_name": "Pérez Fuentes",
             "password":"pbkdf2_sha256$150000$2QoRqQumA4Ot$4PSIJ8cJU/f9F2/XuSaJmeyf5chR4RYxxqEu6TrPtDQ=",
             "is_superuser":false,
             "groups":[2]
@@ -27,9 +27,9 @@
     {
         "model": "auth.user",
         "fields": {
-            "username":"administrador",
-            "first_name": "Admin",
-            "last_name": "Sistema",
+            "username":"Docker94",
+            "first_name": "Erick",
+            "last_name": "Ventura Hurtado",
             "password":"pbkdf2_sha256$150000$2QoRqQumA4Ot$4PSIJ8cJU/f9F2/XuSaJmeyf5chR4RYxxqEu6TrPtDQ=",
             "is_superuser":false,
             "is_staff":true,
@@ -40,9 +40,9 @@
     {
         "model": "auth.user",
         "fields": {
-            "username":"delegado",
-            "first_name": "Delegado",
-            "last_name": "Sistema",
+            "username":"Marcos123",
+            "first_name": "Marcos",
+            "last_name": "Parrillas Orellana",
             "password":"pbkdf2_sha256$150000$2QoRqQumA4Ot$4PSIJ8cJU/f9F2/XuSaJmeyf5chR4RYxxqEu6TrPtDQ=",
             "is_superuser":false,
             "is_staff":true,
