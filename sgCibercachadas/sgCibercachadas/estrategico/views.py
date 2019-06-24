@@ -180,7 +180,8 @@ class ProductosVendidosView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
         form=FechasForm()
         fecha=datetime.now()
         fecha=datetime.strftime(fecha,'%d/%m/%Y')
-        return render(request, self.template_name, {'form': form,'fecha':fecha})
+        categoria = Categoria.objects.all()
+        return render(request, self.template_name, {'form': form,'fecha':fecha,'categoria':categoria})
 
     def post(self, request, *args, **kwargs):
         form = FechasForm(request.POST)

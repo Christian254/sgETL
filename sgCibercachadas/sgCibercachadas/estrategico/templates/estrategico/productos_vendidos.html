@@ -35,8 +35,12 @@ Resumen de Productos mas vendidos con fechas establecidas
                     </div>
                     <div class="col-3">
                         <select name="categoria" id="inputState" class="form-control">
-                            <option selected value="">Elegir Categoria</option>
-                            <option>...</option>
+                            <option selected value="">Todas las Categorias</option>
+                            
+                            {% for c in categoria  %}
+                            <option value="{{c.nombre}}">{{c.nombre}}</option>
+                            {% endfor %}                               
+                            
                         </select>
                     </div>
                 </div>
