@@ -63,9 +63,9 @@ class ProductosGeneranGananciasView(LoginRequiredMixin,PermissionRequiredMixin,g
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_ganancia.reporte(request,detalle_venta[:50], 'prod_ganancia',inicio,fin, total_ganancia)
+            return producto_ganancia.reporte(request,detalle_venta[:10], 'prod_ganancia',inicio,fin, total_ganancia)
         elif(tipo==3):
-            return producto_gananciaxls.hoja_calculo(request,detalle_venta,'prueba',inicio,fin,total_ganancia)
+            return producto_gananciaxls.hoja_calculo(request,detalle_venta[:10],'prod_ganancia',inicio,fin,total_ganancia)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -108,7 +108,7 @@ class ProductosPotencialesView(LoginRequiredMixin,PermissionRequiredMixin,generi
             return redirect(self.request.path_info)
         elif(tipo==2):
             nota =[]
-            return producto_potencial.reporte(request,potencial,'producto_potencial',inicio,fin)
+            return producto_potencial.reporte(request,potencial[:5],'producto_potencial',inicio,fin)
         elif(tipo==3):
             nota = []
             return hoja_calculo(request,nota,'prueba')
@@ -165,9 +165,9 @@ class ProductosGananciasClientesView(LoginRequiredMixin,PermissionRequiredMixin,
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_cliente.reporte(request,cliente_agrupado,'producto_cliente',inicio,fin,total_ganancia)
+            return producto_cliente.reporte(request,cliente_agrupado[:10],'producto_cliente',inicio,fin,total_ganancia)
         elif(tipo==3):
-            return producto_clientexls.hoja_calculo(request,cliente_agrupado,'producto_cliente',inicio,fin,total_ganancia)
+            return producto_clientexls.hoja_calculo(request,cliente_agrupado[:10],'producto_cliente',inicio,fin,total_ganancia)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -216,9 +216,9 @@ class ProductosVendidosView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_vendido.reporte(request,detalle_vendido,'producto_vendido',inicio,fin,total_cantidad)
+            return producto_vendido.reporte(request,detalle_vendido[:10],'producto_vendido',inicio,fin,total_cantidad)
         elif(tipo==3):
-            return producto_vendidoxls.hoja_calculo(request,detalle_vendido,'producto_vendido',inicio,fin,total_cantidad)
+            return producto_vendidoxls.hoja_calculo(request,detalle_vendido[:10],'producto_vendido',inicio,fin,total_cantidad)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -299,7 +299,7 @@ class ProductosTardanzaProductosView(LoginRequiredMixin,PermissionRequiredMixin,
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_tardanza.reporte(request,fin_tardanza,'producto_tardanza',inicio,fin)
+            return producto_tardanza.reporte(request,fin_tardanza[:10],'producto_tardanza',inicio,fin)
         elif(tipo==3):
             nota = []
             return hoja_calculo(request,nota,'prueba')

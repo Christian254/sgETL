@@ -70,9 +70,9 @@ class ProductosMasVendidosView(LoginRequiredMixin,PermissionRequiredMixin, gener
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_vendido.reporte(request,detalle_vendido,'producto_vendido_tactico',inicio,fin,categoria)
+            return producto_vendido.reporte(request,detalle_vendido[:30],'producto_vendido_tactico',inicio,fin,categoria)
         elif(tipo==3):
-            return producto_vendidoxls.hoja_calculo(request,detalle_vendido,'producto_vendido_tactico',inicio,fin,categoria)
+            return producto_vendidoxls.hoja_calculo(request,detalle_vendido[:30],'producto_vendido_tactico',inicio,fin,categoria)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -132,9 +132,9 @@ class ProductosGeneranGananciaView(LoginRequiredMixin,PermissionRequiredMixin,ge
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_ganancia.reporte(request,detalle_vendido,'producto_ganancia_tactico',inicio,fin,categoria)
+            return producto_ganancia.reporte(request,detalle_vendido[:30],'producto_ganancia_tactico',inicio,fin,categoria)
         elif(tipo==3):
-            return producto_gananciaxls.hoja_calculo(request,detalle_vendido,'producto_ganancia_tactico',inicio,fin,categoria)
+            return producto_gananciaxls.hoja_calculo(request,detalle_vendido[:30],'producto_ganancia_tactico',inicio,fin,categoria)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -179,9 +179,9 @@ class RetornoEquiposGarantiaView(LoginRequiredMixin,PermissionRequiredMixin,gene
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_retorno.reporte(request,retorno,'producto_retorno_tactico',inicio,fin,categoria)
+            return producto_retorno.reporte(request,retorno[:15],'producto_retorno_tactico',inicio,fin,categoria)
         elif(tipo==3):
-            return producto_retornoxls.hoja_calculo(request,retorno,'producto_retorno_tactico',inicio,fin,categoria)
+            return producto_retornoxls.hoja_calculo(request,retorno[:15],'producto_retorno_tactico',inicio,fin,categoria)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -221,7 +221,7 @@ class RetornoEnConsignaView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_consigna.reporte(request,consigna,'producto_consigna',inicio,fin)
+            return producto_consigna.reporte(request,consigna[:20],'producto_consigna',inicio,fin)
         elif(tipo==3):
             nota = []
             return hoja_calculo(request,nota,'prueba')
@@ -284,11 +284,11 @@ class ClientesGananciaView(LoginRequiredMixin,PermissionRequiredMixin,generic.Te
             return redirect(self.request.path_info)
         elif(tipo==2):
             if(cliente_id):
-                return producto_cliente.reporte(request,detalle_cliente,'producto_cliente_tactico',inicio,fin,cliente_id)
+                return producto_cliente.reporte(request,detalle_cliente[:15],'producto_cliente_tactico',inicio,fin,cliente_id)
             else:
-                return producto_cliente.reporte(request,cliente_agrupado,'producto_cliente_tactico',inicio,fin,cliente_id)
+                return producto_cliente.reporte(request,cliente_agrupado[:15],'producto_cliente_tactico',inicio,fin,cliente_id)
         elif(tipo==3):
-            return producto_clientexls.hoja_calculo(request,cliente_agrupado,'producto_cliente',inicio,fin)
+            return producto_clientexls.hoja_calculo(request,cliente_agrupado[:15],'producto_cliente',inicio,fin)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -328,7 +328,7 @@ class ClientesFrecuentesView(LoginRequiredMixin,PermissionRequiredMixin,generic.
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return cliente_frecuente.reporte(request,frecuente,'cliente_frecuente',inicio,fin)
+            return cliente_frecuente.reporte(request,frecuente[:20],'cliente_frecuente',inicio,fin)
         elif(tipo==3):
             nota = []
             return hoja_calculo(request,nota,'prueba')
