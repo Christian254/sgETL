@@ -67,9 +67,12 @@ transaccional
     <div class="tile-body">
         Cargar los datos de los productos retornados por los clientes, en un formato .csv para dejarlos almacenados en la base de datos que usa este sistema
         informatico
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="{% url 'etl:etl_retorno'%}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-        <input class="form-control" type="file" name="file" >
+        <input class="form-control" type="file" name="file_retorno" >
+        {% if form.file_retorno.errors %}
+        <div class="form-control-feedback text-danger"> {{form.file_retorno.errors.0}}</div>
+        {% endif %}
     </div>
     <div class="tile-footer">
       <div class="text-center">
@@ -97,10 +100,12 @@ transaccional
     <div class="tile-body">
       Cargar los datos de los productos potenciales, en un formato .csv para dejarlos almacenados en la base de datos que usa este sistema
       informatico      
-      <form action="" method="post" enctype="multipart/form-data">
+      <form action="{% url 'etl:etl_potencial'%}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-      <input class="form-control" type="file" name="file" >
-
+      <input class="form-control" type="file" name="file_potencial" >
+      {% if form.file_potencial.errors %}
+      <div class="form-control-feedback text-danger"> {{form.file_potencial.errors.0}}</div>
+      {% endif %}
     </div>
     <div class="tile-footer">
       <div class="text-center">
@@ -129,10 +134,12 @@ transaccional
     <div class="tile-body">
       Cargar los datos de los productos en estado consigna, en un formato .csv para dejarlos almacenados en la base de datos que usa este sistema
       informatico        
-      <form action="" method="post" enctype="multipart/form-data">
+      <form action="{% url 'etl:etl_consigna'%}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-      <input class="form-control" type="file" name="file" >
-    
+      <input class="form-control" type="file" name="file_consigna" >
+      {% if form.file_consigna.errors %}
+      <div class="form-control-feedback text-danger"> {{form.file_consigna.errors.0}}</div>
+      {% endif %}
     </div>
     <div class="tile-footer">
       <div class="text-center">
@@ -163,8 +170,26 @@ submitETL.addEventListener('click',function(ev){
   setTimeout(function(){
     submitETL.setAttribute("style","display:none")
     loadingETL.style.display="inline-flex"
-  },700)
-
+  },700);
 })
+submitRetorno.addEventListener('click',function(ev){
+  setTimeout(function(){
+    submitETL.setAttribute("style","display:none")
+    loadingRetorno.style.display="inline-flex"
+  },700);
+})
+submitPotencial.addEventListener('click',function(ev){
+  setTimeout(function(){
+    submitETL.setAttribute("style","display:none")
+    loadingPotencial.style.display="inline-flex"
+  },700);
+})
+submitConsigna.addEventListener('click',function(ev){
+  setTimeout(function(){
+    submitConsigna.setAttribute("style","display:none")
+    loadingConsigna.style.display="inline-flex"
+  },700);
+})
+
 </script>
 {% endblock plugins %}
