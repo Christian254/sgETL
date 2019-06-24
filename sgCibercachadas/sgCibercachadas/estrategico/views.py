@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.views import generic
-from plantilla_reporte.estretegicopdf import producto_ganancia,producto_cliente,producto_vendido,producto_potencial
+from plantilla_reporte.estretegicopdf import producto_ganancia,producto_cliente,producto_vendido,producto_potencial,producto_tardanza
 from plantilla_reporte.estrategicoxls import producto_gananciaxls,producto_clientexls,producto_vendidoxls
 from django.contrib import messages
 from django.utils import timezone
@@ -227,7 +227,7 @@ class ProductosTardanzaProductosView(LoginRequiredMixin,PermissionRequiredMixin,
     template_name='estrategico/productos_tardanzas_movimiento.html'
     login_url='general:login'
     permission_required = 'gerencial.resumen_tardanzas_productos'
-
+    
     
     def get(self,request,*args,**kwargs):
         form=FechasForm()
@@ -245,14 +245,61 @@ class ProductosTardanzaProductosView(LoginRequiredMixin,PermissionRequiredMixin,
 
         inicio=request.POST.get("fechainicio",None)
         fin=request.POST.get("fechafin",None)
-        tipo=request.POST.get("tipo",None)
+        tipo=int(request.POST.get("tipo",None))
+
+        fecha_inicio = datetime.strptime(inicio,'%d/%m/%Y')
+        fecha_inicio = datetime.strftime(fecha_inicio,'%Y-%m-%d')
+
+        fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
+        fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d')
         
+        prod_kardex = Kardex.objects.all().distinct('idProducto')
+        
+        idProducto = []
+        
+        producto_existencia = []
+        #Todos los productos ordenado 
+        for p in prod_kardex:
+            prod_ex = dict(Kardex.objects.filter(idProducto=p.idProducto).values('idProducto','cantExistencia','idProducto__nombre').order_by('-id').first())
+            producto_existencia.append(prod_ex)
+        
+        
+        prod_final = []
+        for p in producto_existencia:
+            pfin = Kardex.objects.filter(Q(idProducto = p['idProducto']) & Q(fecha = fecha_inicio)).values('idProducto','cantExistencia').first()
+            if(pfin):
+                prod_final.append(dict(pfin))
+            else:
+                pfin = Kardex.objects.filter(Q(idProducto = p['idProducto']) & Q(fecha__lte = fecha_inicio)).values('idProducto','cantExistencia').first()
+                if(pfin):
+                    prod_final.append(dict(pfin))
+                else:
+                    k = {}
+                    k['fecha'] = fecha_inicio
+                    k['cantExistencia'] = 0
+                    k['idProducto'] = p['idProducto']
+                    prod_final.append(k)
+
+        fin_tardanza = []
+        
+        for i in prod_final:
+            consigna = list(ProductoConsigna.objects.filter(Q(fechaFin__gte=fecha_fin)&Q(idProducto=i['idProducto'])).values('idProducto__nombre').annotate(Sum('cantidad')))
+            for j in producto_existencia:
+                if i['idProducto'] == j['idProducto']:
+                    i['disponible'] = j['cantExistencia']
+                    i['nombre'] = j['idProducto__nombre']
+                    if(consigna): 
+                        i['consigna'] = consigna[0]['cantidad__sum']
+                    else:
+                        i['consigna'] = 0
+                    fin_tardanza.append(i)
+        
+        fin_tardanza.sort(key=producto_tardanza.clave_orden,reverse=True)
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            nota =[]
-            return plantilla_reporte(request,nota,'prueba')
+            return producto_tardanza.reporte(request,fin_tardanza,'producto_tardanza',inicio,fin)
         elif(tipo==3):
             nota = []
             return hoja_calculo(request,nota,'prueba')
