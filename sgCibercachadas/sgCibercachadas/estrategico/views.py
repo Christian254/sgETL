@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.views import generic
 from plantilla_reporte.estretegicopdf import producto_ganancia,producto_cliente,producto_vendido,producto_potencial,producto_tardanza
-from plantilla_reporte.estrategicoxls import producto_gananciaxls,producto_clientexls,producto_vendidoxls
+from plantilla_reporte.estrategicoxls import producto_gananciaxls,producto_clientexls,producto_vendidoxls, producto_tardanzaxls, producto_potencialxls
 from django.contrib import messages
 from django.utils import timezone
 from datetime import datetime,timezone
@@ -101,17 +101,16 @@ class ProductosPotencialesView(LoginRequiredMixin,PermissionRequiredMixin,generi
         fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d')
 
         potencial = list(ProductoPotencial.objects.filter(fecha__range=(fecha_inicio,fecha_fin)).values('nombre','cantidad','idCliente__nombre'))
-        potencial=agrupar_producto_potencial(potencial)
+        if(potencial):
+            potencial=agrupar_producto_potencial(potencial)
         potencial.sort(key=producto_potencial.clave_orden,reverse=True)
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            nota =[]
             return producto_potencial.reporte(request,potencial[:5],'producto_potencial',inicio,fin)
         elif(tipo==3):
-            nota = []
-            return hoja_calculo(request,nota,'prueba')
+            return producto_potencialxls.hoja_calculo(request,potencial[:5],'producto_potencial',inicio,fin)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -157,17 +156,17 @@ class ProductosGananciasClientesView(LoginRequiredMixin,PermissionRequiredMixin,
                 det['costo'] = 0        
             det['ganancia'] = det['total__sum'] - det['cantidad__sum'] * det['costo']
             total_ganancia += det['ganancia']
-
-        cliente_agrupado = agrupar_cliente(detalle_cliente,'idVenta__idCliente__nombre')
-        cliente_agrupado.sort(key=producto_ganancia.clave_orden,reverse=True)
+        if(detalle_cliente):
+            detalle_cliente = agrupar_cliente(detalle_cliente,'idVenta__idCliente__nombre')
+        detalle_cliente.sort(key=producto_ganancia.clave_orden,reverse=True)
         
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_cliente.reporte(request,cliente_agrupado[:10],'producto_cliente',inicio,fin,total_ganancia)
+            return producto_cliente.reporte(request,detalle_cliente[:10],'producto_cliente',inicio,fin,total_ganancia)
         elif(tipo==3):
-            return producto_clientexls.hoja_calculo(request,cliente_agrupado[:10],'producto_cliente',inicio,fin,total_ganancia)
+            return producto_clientexls.hoja_calculo(request,detalle_cliente[:10],'producto_cliente',inicio,fin,total_ganancia)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -301,8 +300,7 @@ class ProductosTardanzaProductosView(LoginRequiredMixin,PermissionRequiredMixin,
         elif(tipo==2):
             return producto_tardanza.reporte(request,fin_tardanza[:10],'producto_tardanza',inicio,fin)
         elif(tipo==3):
-            nota = []
-            return hoja_calculo(request,nota,'prueba')
+            return producto_tardanzaxls.hoja_calculo(request,fin_tardanza[:10],'producto_tardanza',inicio,fin)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)

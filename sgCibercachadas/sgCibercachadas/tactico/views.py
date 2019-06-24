@@ -10,7 +10,7 @@ from gerencial.models import *
 from django.db.models import Sum,Count,Q
 from estrategico.forms import  FechasForm
 from plantilla_reporte.tacticopdf import producto_vendido, producto_ganancia,producto_retorno,producto_cliente,producto_consigna,cliente_frecuente
-from plantilla_reporte.tacticoxls import producto_vendidoxls, producto_gananciaxls,producto_retornoxls
+from plantilla_reporte.tacticoxls import producto_vendidoxls, producto_gananciaxls,producto_retornoxls,producto_consignaxls,producto_clientexls,cliente_frecuentexls
 from plantilla_reporte.funciones.funciones import agrupar_cliente_tactico, agrupar_cliente_frecuente
 import operator
 
@@ -223,8 +223,7 @@ class RetornoEnConsignaView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
         elif(tipo==2):
             return producto_consigna.reporte(request,consigna[:20],'producto_consigna',inicio,fin)
         elif(tipo==3):
-            nota = []
-            return hoja_calculo(request,nota,'prueba')
+            return producto_consignaxls.hoja_calculo(request,consigna[:20],'producto_consigna',inicio,fin)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -288,7 +287,7 @@ class ClientesGananciaView(LoginRequiredMixin,PermissionRequiredMixin,generic.Te
             else:
                 return producto_cliente.reporte(request,cliente_agrupado[:15],'producto_cliente_tactico',inicio,fin,cliente_id)
         elif(tipo==3):
-            return producto_clientexls.hoja_calculo(request,cliente_agrupado[:15],'producto_cliente',inicio,fin)
+            return producto_clientexls.hoja_calculo(request,cliente_agrupado[:15],'producto_cliente',inicio,fin,cliente_id)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -330,8 +329,7 @@ class ClientesFrecuentesView(LoginRequiredMixin,PermissionRequiredMixin,generic.
         elif(tipo==2):
             return cliente_frecuente.reporte(request,frecuente[:20],'cliente_frecuente',inicio,fin)
         elif(tipo==3):
-            nota = []
-            return hoja_calculo(request,nota,'prueba')
+            return cliente_frecuentexls.hoja_calculo(request,frecuente[:20],'cliente_frecuente',inicio,fin)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)

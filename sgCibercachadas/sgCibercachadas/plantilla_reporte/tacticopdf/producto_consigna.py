@@ -35,7 +35,7 @@ def reporte(request,datos,nombre,inicio,fin):
     data = [("Producto", "Categoria", "Cantidad","Inicio","Fin","Cliente")] # Este es el encabezado
     for i in datos:
         data.append((i['idProducto__nombre'],i['idProducto__idCategoria__nombre'],i['cantidad__sum'], datetime.strftime(i['fechaInicio'],"%d/%m/%Y"),datetime.strftime(i['fechaFin'],"%d/%m/%Y"),i['idCliente__nombre']))
-    xlist = [x + x_offset for x in [0, 125, 200, 255,325,400,500]]
+    xlist = [x + x_offset for x in [0, 115, 200, 255,325,400,500]]
     ylist = [h - y_offset - i*padding for i in range(max_rows_per_page + 1)]
     
     #Aquí es donde inserta la data
