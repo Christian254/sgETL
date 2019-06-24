@@ -31,21 +31,27 @@ Administración de Usuarios
                         Apellidos</th>
                     <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1"  style="width: 145px;">
                         Email</th>
+                    <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1"  >
+                            Perfil</th>
+    
                     <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" style="width: 183px;">
                         Acciones</th>
                 </thead>
                 <tbody>
                     {% for item in obj %}
+                         {% if item.groups.first.name != 'Administrador'  %}
                         <tr role="row" class="odd">
                             <td>{{ item.username }}</td>
                             <td>{{ item.first_name }}</td>
                             <td>{{ item.last_name }}</td>
                             <td>{{ item.email }}</td>
+                            <td>{{ item.groups.first.name }}</td>
                             <td>
-                                <button class="btn btn-primary" type="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Editar</button>
+                                <a class="btn btn-primary" href="{% url 'administrador:admin_editar_usuarios' id=item.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"  ></i>Editar</a>
                                 <button class="btn btn-warning" type="button"><i class="fa fa-user-times" aria-hidden="true"></i>Deshabilitar</button>
                             </td>
                         </tr>
+                        {% endif %}
                     {% endfor %}
                 </tbody>
             </table>

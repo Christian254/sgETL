@@ -14,3 +14,5 @@ class Home(LoginRequiredMixin,generic.TemplateView):
 class Login(generic.TemplateView):
     template_name = 'general/login.html'
 
+class PerfilView(generic.TemplateView):
+    template_name='general/perfil.html'

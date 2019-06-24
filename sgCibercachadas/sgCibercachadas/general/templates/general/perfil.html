@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+{% block head_title %}
+Perfil Usuario
+{% endblock head_title %}
+{% block titulo_principal %}
+Perfil Usuario
+{% endblock titulo_principal %}
+{% block mensaje_titulo %}
+Perfil Usuario
+{% endblock mensaje_titulo %}
+{% block enlace_actual %}
+<a href="">Perfil Usuario</a>
+{% endblock enlace_actual %}
+{% block contenido %}
+<div class="tile-body">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form action="">
+                    <div class="form-group"> <label class="control-label">Usuario:</label> <input class="form-control"
+                            type="text" readonly="" value="Docker94"> </div>
+                    <div class="form-group"> <label class="control-label">Nombre:</label> <input class="form-control"
+                            type="text" readonly="" value="Erick"> </div>
+                    <div class="form-group"> <label class="control-label">Nombre:</label> <input class="form-control"
+                                type="text" readonly="" value="Erick"> </div>
+                    <div class="form-group"> <label class="control-label">Perfil:</label> <input class="form-control"
+                            type="text" value="Administrador" readonly=""> </div>
+                </form> <a href="/perfil/cambiar" class="btn btn-success">Cambiar Contraseña</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock contenido %}

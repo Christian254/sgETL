@@ -62,10 +62,10 @@ transaccional
     <div class="tile-title-w-btn">
       <h3 class="title">Retorno de productos</h3>
       <div class="btn-group">
-          <a class="btn btn-success" href="#">Formato Ejemplo  <i class="fa fa-lg fa-file-excel-o "></i></a></div>
+          <a class="btn btn-success" href="/static/formatos/retornogarantiaformato.xlsx">Formato Ejemplo  <i class="fa fa-lg fa-file-excel-o "></i></a></div>
     </div>
     <div class="tile-body">
-        Cargar los datos de los productos retornados por los clientes, en un formato .csv para dejarlos almacenados en la base de datos que usa este sistema
+        Cargar los datos de los productos retornados por los clientes, en un formato .xlsx para dejarlos almacenados en la base de datos que usa este sistema
         informatico
         <form action="{% url 'etl:etl_retorno'%}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -95,10 +95,10 @@ transaccional
     <div class="tile-title-w-btn">
       <h3 class="title">Productos potenciales</h3>
       <div class="btn-group">
-                    <a class="btn btn-success" href="#">Formato Ejemplo  <i class="fa fa-lg fa-file-excel-o "></i></a></div>
+                    <a class="btn btn-success" href="/static/formatos/productopotencialformato.xlsx">Formato Ejemplo  <i class="fa fa-lg fa-file-excel-o "></i></a></div>
     </div>
     <div class="tile-body">
-      Cargar los datos de los productos potenciales, en un formato .csv para dejarlos almacenados en la base de datos que usa este sistema
+      Cargar los datos de los productos potenciales, en un formato .xlsx para dejarlos almacenados en la base de datos que usa este sistema
       informatico      
       <form action="{% url 'etl:etl_potencial'%}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -129,10 +129,10 @@ transaccional
     <div class="tile-title-w-btn">
       <h3 class="title">Productos en consigna</h3>
       <div class="btn-group">
-                <a class="btn btn-success" href="#">Formato Ejemplo  <i class="fa fa-lg fa-file-excel-o "></i></a></div>
+                <a class="btn btn-success" href="/static/formatos/productoconsignaformato.xlsx" download>Formato Ejemplo  <i class="fa fa-lg fa-file-excel-o "></i></a></div>
     </div>
     <div class="tile-body">
-      Cargar los datos de los productos en estado consigna, en un formato .csv para dejarlos almacenados en la base de datos que usa este sistema
+      Cargar los datos de los productos en estado consigna, en un formato .xlsx para dejarlos almacenados en la base de datos que usa este sistema
       informatico        
       <form action="{% url 'etl:etl_consigna'%}" method="post" enctype="multipart/form-data">
         {% csrf_token %}

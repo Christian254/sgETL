@@ -1,15 +1,15 @@
 {% extends 'base/base.html' %}
 {% block head_title %}
-Crear Usuario
+Editar Usuario
 {% endblock head_title %}
 {% block titulo_principal %}
-Crear Usuario
+Editar Usuario
 {% endblock titulo_principal %}
 {% block mensaje_titulo %}
-Crear Usuario
+Editar Usuario
 {% endblock mensaje_titulo %}
 {% block enlace_actual %}
-<a href="{% url 'administrador:admin_crear_usuarios' %}">Crear Usuario</a>
+<a href="">Editar Usuario</a>
 {% endblock enlace_actual %}
 {% block contenido %}
 {% if messages %}
@@ -50,20 +50,7 @@ Crear Usuario
                 <div class="form-control-feedback col-6 text-danger"> {{form.email.errors.0}}</div>
                 {% endif %}
             </div>
-          <div class="form-group">
-              <label class="control-label">Contraseña</label>
-              {{form.password}}
-              {% if form.password.errors %}
-              <div class="form-control-feedback col-6 text-danger"> {{form.password.errors.0}}</div>
-              {% endif %}
-          </div>
-          <div class="form-group">
-              <label class="control-label">Ingrese nuevamente Contraseña</label>
-              {{form.password2}}
-              {% if form.password2.errors %}
-              <div class="form-control-feedback col-6 text-danger"> {{form.password2.errors.0}}</div>
-              {% endif %}
-        </div>
+         
         <div class="form-group">
                 <label class="control-label">Perfil de acceso</label>
                 <div class="form-check">
@@ -77,13 +64,13 @@ Crear Usuario
                   </label>
                 </div>
                 <div class="form-check">
-                  <label class="form-check-label">
-                    <input class="form-check-input" type="radio" name="rol" value=1>Delegado
-                  </label>
-                </div>
+                    <label class="form-check-label">
+                      <input class="form-check-input" type="radio" name="rol" value=1>Delegado
+                    </label>
+                  </div>
         </div>
         <div class="tile-footer">
-                <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Registrar</button>&nbsp;&nbsp;&nbsp;<a class="btn btn-secondary" href="/admin/adminusuarios"><i class="fa fa-fw fa-lg fa-times-circle"></i>Cancelar</a>
+                <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-pencil"></i>Actualizar</button>&nbsp;&nbsp;&nbsp;<a class="btn btn-secondary" href="/admin/adminusuarios"><i class="fa fa-fw fa-lg fa-times-circle"></i>Cancelar</a>
               </div>
   </form>
 

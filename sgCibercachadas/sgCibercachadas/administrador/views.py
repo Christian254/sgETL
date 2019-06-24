@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import Group
 from django.contrib import messages
+from django.http import Http404
 
 from administrador.forms import *
 
@@ -35,6 +36,27 @@ class CrearUsuariosView(generic.TemplateView):
                                 password=request.POST.get('password'))
             my_group.user_set.add(user)
             messages.add_message(request, messages.SUCCESS, 'Ingreso del Usuario con Username: '+request.POST.get('username')+' Contraseña: '+request.POST.get('password'))
+
+            return redirect(self.request.path_info)
+        else:
+            form.AddIsInvalid()
+            return render(request,self.template_name,{"form":form})
+
+class EditarUsuariosView(generic.TemplateView):
+    template_name='administrador/editar_usuarios.html'
+
+
+    def get(self,request,*args,**kwargs):
+        form= UsuarioEditForm()
+        usuario=User.objects.filter(pk=self.kwargs['id']).first
+        if not usuario:
+           return redirect('administrador:admin_gestion_usuarios')
+        return render(request,self.template_name,{"form":form})
+
+    def post(self,request,*args,**kwargs):   
+        form= UsuarioEditForm(request.POST)
+        if form.is_valid():
+            messages.add_message(request, messages.SUCCESS, 'Actualizacion del Usuario con Username: '+request.POST.get('username'))
 
             return redirect(self.request.path_info)
         else:
