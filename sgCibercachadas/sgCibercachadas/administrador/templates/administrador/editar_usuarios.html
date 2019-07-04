@@ -53,21 +53,16 @@ Editar Usuario
          
         <div class="form-group">
                 <label class="control-label">Perfil de acceso</label>
-                <div class="form-check">
+                {% for role in groups %}
+                {% if role.id != 3 %} 
+                <div class="form-check">  
                   <label class="form-check-label">
-                    <input class="form-check-input" type="radio" checked name="rol" value=2>Tactico
+                    <input class="form-check-input" type="radio" {% if role.id == group %} checked {% endif %} name="rol" value="{{role.id}}">{{role.name}}
                   </label>
-                </div>
-                <div class="form-check">
-                  <label class="form-check-label">
-                    <input class="form-check-input" type="radio" name="rol" value=1>Estrategico
-                  </label>
-                </div>
-                <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="radio" name="rol" value=1>Delegado
-                    </label>
-                  </div>
+                </div>  
+                {% endif %}
+                {% endfor %}
+    
         </div>
         <div class="tile-footer">
                 <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-pencil"></i>Actualizar</button>&nbsp;&nbsp;&nbsp;<a class="btn btn-secondary" href="/admin/adminusuarios"><i class="fa fa-fw fa-lg fa-times-circle"></i>Cancelar</a>

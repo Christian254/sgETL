@@ -60,14 +60,15 @@ Administración de Usuarios
                     {% if page_obj.has_previous %}
                     <li class="paginate_button page-item previous" id="sampleTable_previous">
                         <a href="?page={{ page_obj.previous_page_number }}" aria-controls="sampleTable" data-dt-idx="0" tabindex="0" class="page-link">
-                            Previous
+                            Anterior
                         </a>
                     </li>
                     {% endif %}
+                
                     {% if page_obj.has_next %}
                     <li class="paginate_button page-item previous" id="sampleTable_previous">
                         <a href="?page={{ page_obj.next_page_number }}" aria-controls="sampleTable" data-dt-idx="0" tabindex="0" class="page-link">
-                            Next
+                            Siguiente
                         </a>
                     </li>
                     {% endif %}
