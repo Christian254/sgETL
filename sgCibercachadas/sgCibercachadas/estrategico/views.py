@@ -285,7 +285,7 @@ class ProductosTardanzaProductosView(LoginRequiredMixin,PermissionRequiredMixin,
         fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
         fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d')
         
-        prod_kardex = Kardex.objects.all().distinct('idProducto')
+        prod_kardex = Kardex.objects.filter(Q(fecha__gte=fecha_inicio)and Q(fecha__lte=fecha_fin)).distinct('idProducto')
         
         idProducto = []
         
