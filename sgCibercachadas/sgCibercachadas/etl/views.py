@@ -29,6 +29,13 @@ class EtlBD(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateView):
         script_dir="../../ETL/etlSGcachadas"
         p = Popen(["python", "main.py"], cwd=script_dir, stdout=PIPE, stderr=PIPE)
         print(p.communicate())
+        
+        #bitacora 
+        Bitacora.objects.create(
+        usuario=request.user.first_name+" "+request.user.last_name,
+        accion="Ejecucion ETL (Script) ",
+        )
+
         messages.add_message(request, messages.SUCCESS, 'ETL ejecutado con exito')
         return redirect('/etl')
 
@@ -93,7 +100,12 @@ class CargaRetorno(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateVi
                         else:
                             break
                 if(retorno.nombre_producto and retorno.nombre_cliente and nombre_proveedor):
-                    retorno.save()   
+                    retorno.save()
+                    #bitacora 
+                    Bitacora.objects.create(
+                    usuario=request.user.first_name+" "+request.user.last_name,
+                    accion="Carga productos retorno (.xls) ",
+                    )   
                       
 
             messages.add_message(request, messages.SUCCESS, 'Carga de producto retorno realizada con exito')

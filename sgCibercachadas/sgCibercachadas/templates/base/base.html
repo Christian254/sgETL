@@ -20,7 +20,7 @@
     </head>
         <body class="app sidebar-mini rtl">
                 <!-- Navbar-->
-            <header class="app-header"><a class="app-header__logo" href="#">CiberCachadas</a>
+            <header class="app-header"><a class="app-header__logo" href="/">CiberCachadas</a>
                   <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
                   <!-- Navbar Right Menu-->
             {% if user.is_authenticated %}
@@ -28,7 +28,7 @@
             <!-- User Menu-->
                 <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
                     <ul class="dropdown-menu settings-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="#"><i class="fa fa-user fa-lg"></i> Perfil</a></li>
+                        <li><a class="dropdown-item" href="/perfil"><i class="fa fa-user fa-lg"></i> Perfil</a></li>
                         <li><a class="dropdown-item" href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
                         <li><a class="dropdown-item" href="{% url 'general:logout' %}"><i class="fa fa-sign-out fa-lg"></i> Cerrar sesión</a></li>
                     </ul>
@@ -106,6 +106,9 @@
                                 {% endif %}
                                 {% if perms.gerencial.gestion_usuarios %}
                                 <li><a class="treeview-item" href="{% url 'administrador:admin_crear_usuarios' %}" ><i class="icon fa fa-circle-o"></i> Crear Usuarios</a></li>
+                                {% endif %}
+                                {% if perms.gerencial.gestion_usuarios %}
+                                <li><a class="treeview-item" href="{% url 'administrador:admin_bitacora_usuarios' %}" ><i class="icon fa fa-circle-o"></i> Bitacora Usuarios</a></li>
                                 {% endif %}
                           </ul>
                         </li>

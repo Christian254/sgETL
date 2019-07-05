@@ -131,6 +131,10 @@ class ProductoRetornoHistorico(models.Model):
     codigo=models.CharField(max_length=10,null=True)
     fecha=models.DateField()
 
+class Bitacora(models.Model):
+    usuario=models.CharField(max_length=40)
+    accion=models.CharField(max_length=80)
+    fecha=models.DateTimeField(auto_now_add=True, blank=True)
 
 class PermisosSoporte(models.Model):
     class Meta:
