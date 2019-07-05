@@ -8,6 +8,7 @@ from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.models import Group
 from django.contrib import messages
 from django.http import Http404
+from gerencial.models import Bitacora
 
 from administrador.forms import *
 
@@ -22,6 +23,7 @@ class AdminUsuariosView(LoginRequiredMixin,PermissionRequiredMixin,generic.ListV
 
 
 class CrearUsuariosView(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateView):
+   
     template_name='administrador/crear_usuarios.html'
     login_url='general:login'
     permission_required = 'gerencial.gestion_usuarios'
@@ -47,6 +49,11 @@ class CrearUsuariosView(LoginRequiredMixin,PermissionRequiredMixin,generic.Templ
 
                 my_group.user_set.add(user)
 
+                Bitacora.objects.create(
+                    usuario=request.user.first_name+" "+request.user.last_name,
+                    accion="Registro usuario: "+request.POST.get('username')+", Perfil: "+my_group.name,
+                    )
+
                 messages.add_message(request, messages.SUCCESS, 'Ingreso del Usuario con Username: '
                 +request.POST.get('username')+' Contraseña: '+request.POST.get('password'))
             else:
@@ -61,10 +68,17 @@ class InhabilitarUsuarios(LoginRequiredMixin,PermissionRequiredMixin,generic.Tem
     login_url='general:login'
     permission_required = 'gerencial.gestion_usuarios'
 
-    def post(self,*args, **kwargs):
+    def post(self,request,*args, **kwargs):
         user= get_object_or_404(User, pk=self.kwargs['id'])
         user.is_active= (True,False)[user.is_active]   
         user.save()
+
+        #bitacora
+        Bitacora.objects.create(
+        usuario=request.user.first_name+" "+request.user.last_name,
+        accion=("Deshabilitar","Habilitar")[user.is_active]+
+        " usuario: "+user.username,
+        )
         return redirect("administrador:admin_gestion_usuarios")
 
 
@@ -106,6 +120,10 @@ class EditarUsuariosView(LoginRequiredMixin,PermissionRequiredMixin,generic.Temp
             #only update if the group has id not equals to 3 (admin user).
             if user_groups.group.id!=3:
                 user_groups.save()
+                Bitacora.objects.create(
+                    usuario=request.user.first_name+" "+request.user.last_name,
+                    accion="Editar usuario: "+request.POST.get('username'),
+                    )
              
 
             #updating only the user data 
@@ -121,3 +139,15 @@ class EditarUsuariosView(LoginRequiredMixin,PermissionRequiredMixin,generic.Temp
             form.AddIsInvalid()
             return render(request,self.template_name,{"form":form,"group":current_user.groups.all()[0].id,
         "groups":Group.objects.all()})
+
+class BitacorasView(LoginRequiredMixin, generic.ListView):
+    template_name='administrador/bitacora_usuarios.html'
+    login_url='general:login'
+    permission_required = 'gerencial.gestion_usuarios'   
+    
+    model = Bitacora
+    context_object_name = "obj"
+    ordering=['-id']
+    paginate_by = 10  
+
+    

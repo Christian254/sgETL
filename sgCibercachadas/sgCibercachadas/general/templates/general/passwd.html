@@ -12,14 +12,7 @@ Cambiar contraseña
 <a href="/perfil/cambiar">Cambiar contraseña</a>
 {% endblock enlace_actual %}
 {% block contenido %}
-{% if messages %}
-{% for message in messages %}
-<li{% if message.tags %} class="alert alert-{{ message.tags }} text-center" {% endif %}>
-    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Importante: {% endif %}
-    {{ message }}
-    </li>
-    {% endfor %}
-    {% endif %}
+
 
     <div class="tile-body">
         <div class="container">

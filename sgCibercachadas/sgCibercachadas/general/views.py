@@ -7,7 +7,7 @@ from django.views import generic
 from django.shortcuts import redirect
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-
+from gerencial.models import Bitacora
 
 class Home(LoginRequiredMixin,generic.TemplateView):
     template_name = 'general/home.html'
@@ -36,7 +36,12 @@ class PerfilPasswordView(LoginRequiredMixin,generic.TemplateView):
 
             messages.add_message(request, messages.SUCCESS, 'Se actualizo contraseña con exito')
             update_session_auth_hash(request,user_to_update)
+            #bitacora 
+            Bitacora.objects.create(
+            usuario=request.user.first_name+" "+request.user.last_name,
+            accion="Actualización de contraseña")
 
             return redirect('/perfil')
         else:
             return render(request,self.template_name,{'form':form})
+
