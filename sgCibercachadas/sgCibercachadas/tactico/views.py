@@ -70,9 +70,17 @@ class ProductosMasVendidosView(LoginRequiredMixin,PermissionRequiredMixin, gener
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_vendido.reporte(request,detalle_vendido[:30],'producto_vendido_tactico',inicio,fin,categoria)
+            if(detalle_vendido):
+                return producto_vendido.reporte(request,detalle_vendido[:30],'producto_vendido_tactico',inicio,fin,categoria)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos en el periodo seleccionado')
+                return redirect(self.request.path_info)
         elif(tipo==3):
-            return producto_vendidoxls.hoja_calculo(request,detalle_vendido[:30],'producto_vendido_tactico',inicio,fin,categoria)
+            if(detalle_vendido):
+                return producto_vendidoxls.hoja_calculo(request,detalle_vendido[:30],'producto_vendido_tactico',inicio,fin,categoria)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos en el periodo seleccionado')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -132,9 +140,17 @@ class ProductosGeneranGananciaView(LoginRequiredMixin,PermissionRequiredMixin,ge
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_ganancia.reporte(request,detalle_vendido[:30],'producto_ganancia_tactico',inicio,fin,categoria)
+            if(detalle_vendido):
+                return producto_ganancia.reporte(request,detalle_vendido[:30],'producto_ganancia_tactico',inicio,fin,categoria)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante este periodo')
+                return redirect(self.request.path_info)
         elif(tipo==3):
-            return producto_gananciaxls.hoja_calculo(request,detalle_vendido[:30],'producto_ganancia_tactico',inicio,fin,categoria)
+            if(detalle_vendido):
+                return producto_gananciaxls.hoja_calculo(request,detalle_vendido[:30],'producto_ganancia_tactico',inicio,fin,categoria)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante este periodo')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -169,6 +185,7 @@ class RetornoEquiposGarantiaView(LoginRequiredMixin,PermissionRequiredMixin,gene
 
         fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
         fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d')
+
         if(categoria):
             retorno = list(ProductoRetorno.objects.filter(Q(fecha__range=(fecha_inicio,fecha_fin)) & Q(idProducto__idCategoria__nombre=categoria)).values('idProducto__nombre','idProveedor__razon_social').annotate(Sum('cantidad')))
         else:
@@ -179,9 +196,17 @@ class RetornoEquiposGarantiaView(LoginRequiredMixin,PermissionRequiredMixin,gene
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_retorno.reporte(request,retorno[:15],'producto_retorno_tactico',inicio,fin,categoria)
+            if(retorno):
+                return producto_retorno.reporte(request,retorno[:15],'producto_retorno_tactico',inicio,fin,categoria)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos en el periodo seleccionado')
+                return redirect(self.request.path_info)
         elif(tipo==3):
-            return producto_retornoxls.hoja_calculo(request,retorno[:15],'producto_retorno_tactico',inicio,fin,categoria)
+            if(retorno):
+                return producto_retornoxls.hoja_calculo(request,retorno[:15],'producto_retorno_tactico',inicio,fin,categoria)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos en el periodo seleccionado')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -221,9 +246,17 @@ class RetornoEnConsignaView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_consigna.reporte(request,consigna[:20],'producto_consigna',inicio,fin)
+            if(consigna):
+                return producto_consigna.reporte(request,consigna[:20],'producto_consigna',inicio,fin)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos en el periodo seleccionado')
+                return redirect(self.request.path_info)
         elif(tipo==3):
-            return producto_consignaxls.hoja_calculo(request,consigna[:20],'producto_consigna',inicio,fin)
+            if(consigna):
+                return producto_consignaxls.hoja_calculo(request,consigna[:20],'producto_consigna',inicio,fin)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos en el periodo seleccionado')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -277,17 +310,39 @@ class ClientesGananciaView(LoginRequiredMixin,PermissionRequiredMixin,generic.Te
             total_ganancia += det['ganancia']
 
         detalle_cliente.sort(key=producto_cliente.clave_orden,reverse=True)
-        cliente_agrupado = agrupar_cliente_tactico(detalle_cliente,'idVenta__idCliente__nombre')
+        cliente_agrupado = []
+
+        if(detalle_cliente):
+            cliente_agrupado = agrupar_cliente_tactico(detalle_cliente,'idVenta__idCliente__nombre')
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
             if(cliente_id):
-                return producto_cliente.reporte(request,detalle_cliente[:15],'producto_cliente_tactico',inicio,fin,cliente_id)
+                if(detalle_cliente):
+                    return producto_cliente.reporte(request,detalle_cliente[:15],'producto_cliente_tactico',inicio,fin,cliente_id)
+                else:
+                    messages.add_message(request, messages.WARNING, 'El cliente seleccionado no realizó compras durante el periodo consultado')
+                    return redirect(self.request.path_info)
             else:
-                return producto_cliente.reporte(request,cliente_agrupado[:15],'producto_cliente_tactico',inicio,fin,cliente_id)
+                if(cliente_agrupado):
+                    return producto_cliente.reporte(request,cliente_agrupado[:15],'producto_cliente_tactico',inicio,fin,cliente_id)
+                else:
+                    messages.add_message(request, messages.WARNING, 'No existen compras durante este periodo')
+                    return redirect(self.request.path_info) 
         elif(tipo==3):
-            return producto_clientexls.hoja_calculo(request,cliente_agrupado[:15],'producto_cliente',inicio,fin,cliente_id)
+            if(cliente_id):
+                if(detalle_cliente):
+                    return producto_clientexls.hoja_calculo(request,detalle_cliente[:15],'producto_cliente',inicio,fin,cliente_id)
+                else:
+                    messages.add_message(request, messages.WARNING, 'El cliente seleccionado no realizó compras durante el periodo consultado')
+                    return redirect(self.request.path_info)
+            else:
+                if(cliente_agrupado):
+                    return producto_clientexls.hoja_calculo(request,cliente_agrupado[:15],'producto_cliente',inicio,fin,cliente_id)
+                else:
+                    messages.add_message(request, messages.WARNING, 'No existen compras durante este periodo')
+                    return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -321,15 +376,26 @@ class ClientesFrecuentesView(LoginRequiredMixin,PermissionRequiredMixin,generic.
         fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d %H:%M:%S')
         #Consulta
         detalle_cliente = list(DetalleVenta.objects.filter(Q(idVenta__fecha_hora__range=(fecha_inicio,fecha_fin))&Q(idVenta__idCliente__isnull=False)).values('idVenta__idCliente__nombre','idVenta__fecha_hora','idVenta__idCliente').annotate(Sum('cantidad'),Sum('total')))
-        frecuente = agrupar_cliente_frecuente(detalle_cliente)
-        frecuente.sort(key=cliente_frecuente.clave_orden,reverse=True)
+        frecuente = []
+
+        if(detalle_cliente):
+            frecuente = agrupar_cliente_frecuente(detalle_cliente)
+            frecuente.sort(key=cliente_frecuente.clave_orden,reverse=True)
         if(tipo==1):
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return cliente_frecuente.reporte(request,frecuente[:20],'cliente_frecuente',inicio,fin)
+            if(frecuente):
+                return cliente_frecuente.reporte(request,frecuente[:20],'cliente_frecuente',inicio,fin)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante este periodo')
+                return redirect(self.request.path_info)
         elif(tipo==3):
-            return cliente_frecuentexls.hoja_calculo(request,frecuente[:20],'cliente_frecuente',inicio,fin)
+            if(frecuente):
+                return cliente_frecuentexls.hoja_calculo(request,frecuente[:20],'cliente_frecuente',inicio,fin)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante este periodo')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
