@@ -63,9 +63,17 @@ class ProductosGeneranGananciasView(LoginRequiredMixin,PermissionRequiredMixin,g
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_ganancia.reporte(request,detalle_venta[:10], 'prod_ganancia',inicio,fin, total_ganancia)
+            if(detalle_venta):
+                return producto_ganancia.reporte(request,detalle_venta[:10], 'prod_ganancia',inicio,fin, total_ganancia)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         elif(tipo==3):
-            return producto_gananciaxls.hoja_calculo(request,detalle_venta[:10],'prod_ganancia',inicio,fin,total_ganancia)
+            if(detalle_venta):
+                return producto_gananciaxls.hoja_calculo(request,detalle_venta[:10],'prod_ganancia',inicio,fin,total_ganancia)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -108,9 +116,17 @@ class ProductosPotencialesView(LoginRequiredMixin,PermissionRequiredMixin,generi
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_potencial.reporte(request,potencial[:5],'producto_potencial',inicio,fin)
+            if(potencial):
+                return producto_potencial.reporte(request,potencial[:5],'producto_potencial',inicio,fin)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         elif(tipo==3):
-            return producto_potencialxls.hoja_calculo(request,potencial[:5],'producto_potencial',inicio,fin)
+            if(potencial):
+                return producto_potencialxls.hoja_calculo(request,potencial[:5],'producto_potencial',inicio,fin)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -164,9 +180,17 @@ class ProductosGananciasClientesView(LoginRequiredMixin,PermissionRequiredMixin,
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_cliente.reporte(request,detalle_cliente[:10],'producto_cliente',inicio,fin,total_ganancia)
+            if(detalle_cliente):
+                return producto_cliente.reporte(request,detalle_cliente[:10],'producto_cliente',inicio,fin,total_ganancia)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         elif(tipo==3):
-            return producto_clientexls.hoja_calculo(request,detalle_cliente[:10],'producto_cliente',inicio,fin,total_ganancia)
+            if(detalle_cliente):
+                return producto_clientexls.hoja_calculo(request,detalle_cliente[:10],'producto_cliente',inicio,fin,total_ganancia)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -216,9 +240,17 @@ class ProductosVendidosView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_vendido.reporte(request,detalle_vendido[:10],'producto_vendido',inicio,fin,total_cantidad)
+            if(detalle_vendido):
+                return producto_vendido.reporte(request,detalle_vendido[:10],'producto_vendido',inicio,fin,total_cantidad)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         elif(tipo==3):
-            return producto_vendidoxls.hoja_calculo(request,detalle_vendido[:10],'producto_vendido',inicio,fin,total_cantidad)
+            if(detalle_vendido):
+                return producto_vendidoxls.hoja_calculo(request,detalle_vendido[:10],'producto_vendido',inicio,fin,total_cantidad)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -299,9 +331,17 @@ class ProductosTardanzaProductosView(LoginRequiredMixin,PermissionRequiredMixin,
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            return producto_tardanza.reporte(request,fin_tardanza[:10],'producto_tardanza',inicio,fin)
+            if(fin_tardanza):
+                return producto_tardanza.reporte(request,fin_tardanza[:10],'producto_tardanza',inicio,fin)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         elif(tipo==3):
-            return producto_tardanzaxls.hoja_calculo(request,fin_tardanza[:10],'producto_tardanza',inicio,fin)
+            if(fin_tardanza):
+                return producto_tardanzaxls.hoja_calculo(request,fin_tardanza[:10],'producto_tardanza',inicio,fin)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
