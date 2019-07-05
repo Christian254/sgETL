@@ -64,19 +64,29 @@ class ProductosGeneranGananciasView(LoginRequiredMixin,PermissionRequiredMixin,g
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-                        #bitacora 
-            Bitacora.objects.create(
-            usuario=request.user.first_name+" "+request.user.last_name,
-            accion="Generado reporte estrategico: Productos que generan mas ganancia (pdf)",
-            )
-            return producto_ganancia.reporte(request,detalle_venta[:10], 'prod_ganancia',inicio,fin, total_ganancia)
+            if(detalle_venta):
+                #bitacora 
+                Bitacora.objects.create(
+                usuario=request.user.first_name+" "+request.user.last_name,
+                accion="Generado reporte estrategico: Productos que generan mas ganancia (pdf)",
+                )
+                return producto_ganancia.reporte(request,detalle_venta[:10], 'prod_ganancia',inicio,fin, total_ganancia)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         elif(tipo==3):
-            #bitacora 
-            Bitacora.objects.create(
-            usuario=request.user.first_name+" "+request.user.last_name,
-            accion="Generado reporte estrategico: Productos que generan mas ganancia (xls)",
-            )
-            return producto_gananciaxls.hoja_calculo(request,detalle_venta[:10],'prod_ganancia',inicio,fin,total_ganancia)
+            if(detalle_venta):
+                
+                #bitacora 
+                Bitacora.objects.create(
+                usuario=request.user.first_name+" "+request.user.last_name,
+                accion="Generado reporte estrategico: Productos que generan mas ganancia (xls)",
+                )
+
+                return producto_gananciaxls.hoja_calculo(request,detalle_venta[:10],'prod_ganancia',inicio,fin,total_ganancia)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -119,20 +129,30 @@ class ProductosPotencialesView(LoginRequiredMixin,PermissionRequiredMixin,generi
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            
-            #bitacora 
-            Bitacora.objects.create(
-            usuario=request.user.first_name+" "+request.user.last_name,
-            accion="Generado reporte estrategico: Productos potenciales (pdf)",
-            )
-            return producto_potencial.reporte(request,potencial[:5],'producto_potencial',inicio,fin)
+
+            if(potencial):
+
+                #bitacora 
+                Bitacora.objects.create(
+                usuario=request.user.first_name+" "+request.user.last_name,
+                accion="Generado reporte estrategico: Productos potenciales (pdf)",
+                )
+                return producto_potencial.reporte(request,potencial[:5],'producto_potencial',inicio,fin)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         elif(tipo==3):
-            #bitacora 
-            Bitacora.objects.create(
-            usuario=request.user.first_name+" "+request.user.last_name,
-            accion="Generado reporte estrategico: Productos potenciales (xls)",
-            )
-            return producto_potencialxls.hoja_calculo(request,potencial[:5],'producto_potencial',inicio,fin)
+            if(potencial):
+                                #bitacora 
+                Bitacora.objects.create(
+                usuario=request.user.first_name+" "+request.user.last_name,
+                accion="Generado reporte estrategico: Productos potenciales (xls)",
+                )
+
+                return producto_potencialxls.hoja_calculo(request,potencial[:5],'producto_potencial',inicio,fin)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -186,22 +206,29 @@ class ProductosGananciasClientesView(LoginRequiredMixin,PermissionRequiredMixin,
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            
-            #bitacora 
-            Bitacora.objects.create(
-            usuario=request.user.first_name+" "+request.user.last_name,
-            accion="Generado reporte estrategico: Productos Mayor Ganancia (pdf)",
-            )
 
-            return producto_cliente.reporte(request,detalle_cliente[:10],'producto_cliente',inicio,fin,total_ganancia)
+            if(detalle_cliente):
+                            #bitacora 
+                Bitacora.objects.create(
+                usuario=request.user.first_name+" "+request.user.last_name,
+                accion="Generado reporte estrategico: Productos Mayor Ganancia (pdf)",
+                )
+
+                return producto_cliente.reporte(request,detalle_cliente[:10],'producto_cliente',inicio,fin,total_ganancia)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         elif(tipo==3):
-
-            #bitacora 
-            Bitacora.objects.create(
-            usuario=request.user.first_name+" "+request.user.last_name,
-            accion="Generado reporte estrategico: Productos Mayor Ganancia (xls)",
-            )
-            return producto_clientexls.hoja_calculo(request,detalle_cliente[:10],'producto_cliente',inicio,fin,total_ganancia)
+            if(detalle_cliente):
+                                #bitacora 
+                Bitacora.objects.create(
+                usuario=request.user.first_name+" "+request.user.last_name,
+                accion="Generado reporte estrategico: Productos Mayor Ganancia (xls)",
+                )
+                return producto_clientexls.hoja_calculo(request,detalle_cliente[:10],'producto_cliente',inicio,fin,total_ganancia)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -252,20 +279,28 @@ class ProductosVendidosView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
             return redirect(self.request.path_info)
         elif(tipo==2):
 
-            #bitacora 
-            Bitacora.objects.create(
-            usuario=request.user.first_name+" "+request.user.last_name,
-            accion="Generado reporte estrategico: Productos Mas Vendidos (pdf)")
-            
-            return producto_vendido.reporte(request,detalle_vendido[:10],'producto_vendido',inicio,fin,total_cantidad)
+            if(detalle_vendido):
+                
+                #bitacora 
+                Bitacora.objects.create(
+                usuario=request.user.first_name+" "+request.user.last_name,
+                accion="Generado reporte estrategico: Productos Mas Vendidos (pdf)")
+                
+                return producto_vendido.reporte(request,detalle_vendido[:10],'producto_vendido',inicio,fin,total_cantidad)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         elif(tipo==3):
+            if(detalle_vendido):
+                                #bitacora 
+                Bitacora.objects.create(
+                usuario=request.user.first_name+" "+request.user.last_name,
+                accion="Generado reporte estrategico: Productos Mas Vendidos (xls)")
 
-            #bitacora 
-            Bitacora.objects.create(
-            usuario=request.user.first_name+" "+request.user.last_name,
-            accion="Generado reporte estrategico: Productos Mas Vendidos (xls)")
-
-            return producto_vendidoxls.hoja_calculo(request,detalle_vendido[:10],'producto_vendido',inicio,fin,total_cantidad)
+                return producto_vendidoxls.hoja_calculo(request,detalle_vendido[:10],'producto_vendido',inicio,fin,total_cantidad)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
@@ -300,7 +335,7 @@ class ProductosTardanzaProductosView(LoginRequiredMixin,PermissionRequiredMixin,
         fecha_fin = datetime.strptime(fin,'%d/%m/%Y')
         fecha_fin = datetime.strftime(fecha_fin,'%Y-%m-%d')
         
-        prod_kardex = Kardex.objects.all().distinct('idProducto')
+        prod_kardex = Kardex.objects.filter(Q(fecha__gte=fecha_inicio)and Q(fecha__lte=fecha_fin)).distinct('idProducto')
         
         idProducto = []
         
@@ -346,20 +381,28 @@ class ProductosTardanzaProductosView(LoginRequiredMixin,PermissionRequiredMixin,
             messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
             return redirect(self.request.path_info)
         elif(tipo==2):
-            #bitacora 
-            Bitacora.objects.create(
-            usuario=request.user.first_name+" "+request.user.last_name,
-            accion="Generado reporte estrategico: Tardanza de productos (pdf)")
 
-            return producto_tardanza.reporte(request,fin_tardanza[:10],'producto_tardanza',inicio,fin)
+            if(fin_tardanza):
+                            #bitacora 
+                Bitacora.objects.create(
+                usuario=request.user.first_name+" "+request.user.last_name,
+                accion="Generado reporte estrategico: Tardanza de productos (pdf)")
+
+                return producto_tardanza.reporte(request,fin_tardanza[:10],'producto_tardanza',inicio,fin)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         elif(tipo==3):
+            if(fin_tardanza):
+                                        #bitacora 
+                Bitacora.objects.create(
+                usuario=request.user.first_name+" "+request.user.last_name,
+                accion="Generado reporte estrategico: Tardanza de productos (xls)")
 
-                        #bitacora 
-            Bitacora.objects.create(
-            usuario=request.user.first_name+" "+request.user.last_name,
-            accion="Generado reporte estrategico: Tardanza de productos (xls)")
-
-            return producto_tardanzaxls.hoja_calculo(request,fin_tardanza[:10],'producto_tardanza',inicio,fin)
+                return producto_tardanzaxls.hoja_calculo(request,fin_tardanza[:10],'producto_tardanza',inicio,fin)
+            else:
+                messages.add_message(request, messages.WARNING, 'No se encontraron datos durante el periodo seleccionado')
+                return redirect(self.request.path_info)
         else:
             messages.add_message(request, messages.WARNING, 'Esta opción no es valida')
             return redirect(self.request.path_info)
