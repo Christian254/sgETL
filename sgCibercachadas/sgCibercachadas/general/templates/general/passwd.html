@@ -1,0 +1,61 @@
+{% extends 'base/base.html' %}
+{% block head_title %}
+Cambiar contraseña
+{% endblock head_title %}
+{% block titulo_principal %}
+Cambiar contraseña
+{% endblock titulo_principal %}
+{% block mensaje_titulo %}
+Cambiar contraseña
+{% endblock mensaje_titulo %}
+{% block enlace_actual %}
+<a href="/perfil/cambiar">Cambiar contraseña</a>
+{% endblock enlace_actual %}
+{% block contenido %}
+{% if messages %}
+{% for message in messages %}
+<li{% if message.tags %} class="alert alert-{{ message.tags }} text-center" {% endif %}>
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Importante: {% endif %}
+    {{ message }}
+    </li>
+    {% endfor %}
+    {% endif %}
+
+    <div class="tile-body">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h2 class="text-center">Cambiar Contraseña</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="form-group"> 
+                            <label class="control-label">Contraseña Anterior</label> <input
+                                name="old_password" class="form-control" type="password"
+                                placeholder="Contraseña Anterior" required="" value="{{form.old_password.value}}"> </div>
+                                {% if form.old_password.errors %}
+                                <div class="form-control-feedback col-6 text-danger"> {{form.old_password.errors.0}}</div>
+                                {% endif %}
+                        <div class="form-group"> <label class="control-label">Contraseña Nueva</label> <input
+                                name="new_password" class="form-control" type="password" placeholder="Contraseña Nueva"
+                                required=""> </div>
+                                {% if form.new_password.errors %}
+                                <div class="form-control-feedback col-6 text-danger"> {{form.new_password.errors.0}}</div>
+                                {% endif %}
+                        <div class="form-group"> 
+                            <label class="control-label">Contraseña Nueva (repetir)</label> 
+                            <input name="new_password_repeat" class="form-control" type="password" placeholder="Contraseña Nueva" required=""> 
+                            {% if form.new_password_repeat.errors %}
+                            <div class="form-control-feedback col-6 text-danger"> {{form.new_password_repeat.errors.0}}</div>
+                            {% endif %}
+                            </div> <input type="submit" class="text-center btn btn-primary" value="Guardar">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock contenido %}

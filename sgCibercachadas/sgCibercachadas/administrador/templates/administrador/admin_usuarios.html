@@ -16,42 +16,69 @@ Administración de Usuarios
     <div class="row">
         <div class="col-sm-12 col-md-6">
             <div class="dataTables_length" id="sampleTable_length">
-                    <a class="btn btn-success"  href="{% url 'administrador:admin_crear_usuarios' %}"><i class="fa fa-user-plus" aria-hidden="true"></i>Crear Usuario</a>
-                </div></div></div>
-            <div class="row">
-                <div class="col-sm-12">
-            <table class="table table-hover table-bordered dataTable no-footer" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                <a class="btn btn-success" href="{% url 'administrador:admin_crear_usuarios' %}"><i
+                        class="fa fa-user-plus" aria-hidden="true"></i>Crear Usuario</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-hover table-bordered dataTable no-footer" id="sampleTable" role="grid"
+                aria-describedby="sampleTable_info">
                 <thead>
-                  <tr role="row">
-                      <th class="sorting_asc" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-sort="ascending" style="width: 65px;">
-                        Username</th>
-                    <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" style="width: 137px;">
-                        Nombres</th>
-                    <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1"  style="width: 135px;">
-                        Apellidos</th>
-                    <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1"  style="width: 145px;">
-                        Email</th>
-                    <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1"  >
+                    <tr role="row">
+                        <th class="sorting_asc" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1"
+                            aria-sort="ascending" style="width: 65px;">
+                            Username</th>
+                        <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1"
+                            style="width: 137px;">
+                            Nombres</th>
+                        <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1"
+                            style="width: 135px;">
+                            Apellidos</th>
+                        <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1"
+                            style="width: 145px;">
+                            Email</th>
+                        <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1">
                             Perfil</th>
-    
-                    <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" style="width: 183px;">
-                        Acciones</th>
+
+                        <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1"
+                            style="width: 183px;">
+                            Acciones</th>
                 </thead>
                 <tbody>
                     {% for item in obj %}
-                         {% if item.groups.first.name != 'Administrador'  %}
-                        <tr role="row" class="odd">
-                            <td>{{ item.username }}</td>
-                            <td>{{ item.first_name }}</td>
-                            <td>{{ item.last_name }}</td>
-                            <td>{{ item.email }}</td>
-                            <td>{{ item.groups.first.name }}</td>
-                            <td>
-                                <a class="btn btn-primary" href="{% url 'administrador:admin_editar_usuarios' id=item.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"  ></i>Editar</a>
-                                <button class="btn btn-warning" type="button"><i class="fa fa-user-times" aria-hidden="true"></i>Deshabilitar</button>
-                            </td>
-                        </tr>
+                    {% if item.groups.first.name != 'Administrador'  %}
+                    <tr role="row" class="odd">
+                        <td>{{ item.username }}</td>
+                        <td>{{ item.first_name }}</td>
+                        <td>{{ item.last_name }}</td>
+                        <td>{{ item.email }}</td>
+                        <td>{{ item.groups.first.name }}</td>
+                        {% if item.is_active %}
+                        <td>
+                            <a class="btn btn-primary"
+                                href="{% url 'administrador:admin_editar_usuarios' id=item.id %}"><i
+                                    class="fa fa-pencil-square-o" aria-hidden="true"></i>Editar</a>
+                            <form action="{% url 'administrador:admin_inhabilitar_usuarios' id=item.id %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn btn-warning" type=submit><i class="fa fa-user-times"
+                                    aria-hidden="true"></i>Deshabilitar</button>
+                            </form>
+                        </td>
+                        {% else %}
+                        <td>
+
+                            <form action="{% url 'administrador:admin_inhabilitar_usuarios' id=item.id %}" method="post">
+                                    {% csrf_token %}
+
+                                <button class="btn btn-primary" type=submit><i class="fa fa-unlock"
+                                    aria-hidden="true"></i>Habilitar</button>
+                            </form>
+                        </td>
                         {% endif %}
+                    </tr>
+                    {% endif %}
                     {% endfor %}
                 </tbody>
             </table>
@@ -59,20 +86,22 @@ Administración de Usuarios
                 <ul class="pagination">
                     {% if page_obj.has_previous %}
                     <li class="paginate_button page-item previous" id="sampleTable_previous">
-                        <a href="?page={{ page_obj.previous_page_number }}" aria-controls="sampleTable" data-dt-idx="0" tabindex="0" class="page-link">
+                        <a href="?page={{ page_obj.previous_page_number }}" aria-controls="sampleTable" data-dt-idx="0"
+                            tabindex="0" class="page-link">
                             Anterior
                         </a>
                     </li>
                     {% endif %}
-                
+
                     {% if page_obj.has_next %}
                     <li class="paginate_button page-item previous" id="sampleTable_previous">
-                        <a href="?page={{ page_obj.next_page_number }}" aria-controls="sampleTable" data-dt-idx="0" tabindex="0" class="page-link">
+                        <a href="?page={{ page_obj.next_page_number }}" aria-controls="sampleTable" data-dt-idx="0"
+                            tabindex="0" class="page-link">
                             Siguiente
                         </a>
                     </li>
                     {% endif %}
                 </ul>
-            </div>  
-</div>
-{% endblock contenido %}
+            </div>
+        </div>
+        {% endblock contenido %}

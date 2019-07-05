@@ -11,15 +11,21 @@ from django.http import Http404
 
 from administrador.forms import *
 
-class AdminUsuariosView(generic.ListView):
+class AdminUsuariosView(LoginRequiredMixin,PermissionRequiredMixin,generic.ListView):
     model = User
     template_name='administrador/admin_usuarios.html'
+    login_url='general:login'
+    permission_required = 'gerencial.gestion_usuarios'
     context_object_name = "obj"
-    paginate_by = 8
+    ordering=['-id']
+    paginate_by = 6
 
-class CrearUsuariosView(generic.TemplateView):
+
+class CrearUsuariosView(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateView):
     template_name='administrador/crear_usuarios.html'
-    
+    login_url='general:login'
+    permission_required = 'gerencial.gestion_usuarios'
+
     def get(self,request,*args,**kwargs):
         form= UsuarioForm()
         return render(request,self.template_name,{"form":form})    
@@ -50,8 +56,24 @@ class CrearUsuariosView(generic.TemplateView):
             form.AddIsInvalid()
             return render(request,self.template_name,{"form":form})
 
-class EditarUsuariosView(generic.TemplateView):
+class InhabilitarUsuarios(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateView):
+    template_name="administrador/admin_usuarios.html"
+    login_url='general:login'
+    permission_required = 'gerencial.gestion_usuarios'
+
+    def post(self,*args, **kwargs):
+        user= get_object_or_404(User, pk=self.kwargs['id'])
+        user.is_active= (True,False)[user.is_active]   
+        user.save()
+        return redirect("administrador:admin_gestion_usuarios")
+
+
+
+
+class EditarUsuariosView(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateView):
     template_name='administrador/editar_usuarios.html'
+    login_url='general:login'
+    permission_required = 'gerencial.gestion_usuarios'
 
 
     def get(self,request,*args,**kwargs):
