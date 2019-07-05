@@ -15,7 +15,9 @@ class AdminUsuariosView(generic.ListView):
     model = User
     template_name='administrador/admin_usuarios.html'
     context_object_name = "obj"
-    paginate_by = 8
+    ordering=['-id']
+    paginate_by = 6
+
 
 class CrearUsuariosView(generic.TemplateView):
     template_name='administrador/crear_usuarios.html'
@@ -49,6 +51,18 @@ class CrearUsuariosView(generic.TemplateView):
         else:
             form.AddIsInvalid()
             return render(request,self.template_name,{"form":form})
+
+class InhabilitarUsuarios(generic.TemplateView):
+    template_name="administrador/admin_usuarios.html"
+
+    def post(self,*args, **kwargs):
+        user= get_object_or_404(User, pk=self.kwargs['id'])
+        user.is_active= (True,False)[user.is_active]   
+        user.save()
+        return redirect("administrador:admin_gestion_usuarios")
+
+
+
 
 class EditarUsuariosView(generic.TemplateView):
     template_name='administrador/editar_usuarios.html'
