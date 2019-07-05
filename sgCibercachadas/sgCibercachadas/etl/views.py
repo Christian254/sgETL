@@ -111,7 +111,44 @@ class CargaPotencial(LoginRequiredMixin,PermissionRequiredMixin,generic.Template
     
     def post(self,request,*args,**kwargs):
         form= PotencialForm(request.POST,request.FILES)
-        if form.is_valid():
+        if form.is_valid():            
+            archivo=request.FILES.get("file_potencial")
+            archivo= openpyxl.load_workbook(archivo)
+            hoja1=archivo.get_sheet_by_name('Hoja1')
+            max_row = hoja1.max_row
+            for row in hoja1.iter_rows(min_row=5, max_col=5, max_row=max_row):
+                i=0
+                producto = ProductoPotencial()
+                nombre_cliente = None
+                for cell in row:
+                    i+=1
+                    if(i==2):
+                        if(cell.value):
+                            producto.fecha = cell.value
+                        else:
+                            break
+                    if(i==3):
+                        if(cell.value):
+                            try:
+                                nombre_cliente = cell.value
+                                producto.idCliente = Cliente.objects.get(nombre=nombre_cliente)
+                            except Cliente.DoesNotExist:
+                                nombre_cliente = None
+                        else:
+                            break
+                    if(i==4):
+                        if(cell.value):
+                            producto.nombre = cell.value
+                        else:
+                            break
+                    if(i==5):
+                        if(cell.value):
+                            producto.cantidad = cell.value
+                        else:
+                            break
+                if(nombre_cliente):
+                    producto.save()
+
 
             messages.add_message(request, messages.SUCCESS, 'Carga de producto potenciales realizada con exito')
             return redirect('etl:carga_menu')
@@ -129,7 +166,52 @@ class CargaConsigna(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateV
     def post(self,request,*args,**kwargs):
         form= ConsignaForm(request.POST,request.FILES)
         if form.is_valid():
-
+            archivo=request.FILES.get("file_consigna")
+            archivo= openpyxl.load_workbook(archivo)
+            hoja1=archivo.get_sheet_by_name('Hoja1')
+            max_row = hoja1.max_row
+            for row in hoja1.iter_rows(min_row=5, max_col=6, max_row=max_row):
+                i=0
+                consigna = ProductoConsigna()
+                cliente = None
+                producto = None
+                for cell in row:
+                    i+=1
+                    if(i==2):
+                        if(cell.value):
+                            consigna.fechaInicio = cell.value
+                        else:
+                            break
+                    if(i==3):
+                        if(cell.value):
+                            consigna.fechaFin = cell.value
+                        else:
+                            break
+                    if(i==4):
+                        if(cell.value):
+                            try:
+                                producto = Producto.objects.get(codigo = cell.value)
+                                consigna.idProducto = producto
+                            except Producto.DoesNotExist:
+                                producto = None
+                        else:
+                            break
+                    if(i==5):
+                        if(cell.value):
+                            try:
+                                cliente = Cliente.objects.get(nombre=cell.value)
+                                consigna.idCliente = cliente
+                            except Cliente.DoesNotExist:
+                                cliente = None
+                        else:
+                            break
+                    if(i==6):
+                        if(cell.value):
+                            consigna.cantidad = cell.value
+                        else:
+                            break
+                if(producto and cliente):
+                    consigna.save()
             messages.add_message(request, messages.SUCCESS, 'Carga de productos en consigna realizada con exito')
             return redirect('etl:carga_menu')
         else:
