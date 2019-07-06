@@ -34,8 +34,11 @@ class ProductosMasVendidosView(LoginRequiredMixin,PermissionRequiredMixin, gener
         if form.is_valid():
             print("valido")
         else:
-            form.AddIsInvalid()
-            return render(request, self.template_name, {'form':form})
+            if request.is_ajax():
+                return JsonResponse(form.errors.as_json(),safe=False)
+            else:
+                form.AddIsInvalid()
+                return render(request, self.template_name, {'form':form})
 
         inicio=request.POST.get("fechainicio",None)
         fin=request.POST.get("fechafin",None)
@@ -198,8 +201,11 @@ class RetornoEquiposGarantiaView(LoginRequiredMixin,PermissionRequiredMixin,gene
         if form.is_valid():
             print("valido")
         else:
-            form.AddIsInvalid()
-            return render(request, self.template_name, {'form':form})
+            if request.is_ajax():
+                return JsonResponse(form.errors.as_json(),safe=False)
+            else:
+                form.AddIsInvalid()
+                return render(request, self.template_name, {'form':form})
 
         inicio = request.POST.get('fechainicio',None)
         fin = request.POST.get('fechafin',None)
@@ -265,9 +271,12 @@ class RetornoEnConsignaView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
         if form.is_valid():
             print("valido")
         else:
-            form.AddIsInvalid()
-            return render(request, self.template_name, {'form':form})
-
+            if request.is_ajax():
+                return JsonResponse(form.errors.as_json(),safe=False)
+            else:
+                form.AddIsInvalid()
+                return render(request, self.template_name, {'form':form})
+                
         inicio = request.POST.get('fechainicio',None)
         fin = request.POST.get('fechafin',None)
         tipo = int(request.POST.get('tipo',None))

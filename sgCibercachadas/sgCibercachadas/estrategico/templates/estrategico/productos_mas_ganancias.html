@@ -33,8 +33,8 @@ Resumen de Productos que generan mas ganancias con fechas establecidas
                 <div class="col-12">
                     <div class="row ">
                         <div class="col-4">
-                            <button name="tipo" class="btn btn-default boton-custom" type="submit" value="1">Preview <i
-                                    class="fa fa-eye fa-2x" aria-hidden="true"></i></button>
+                            <button name="tipo" class="btn btn-default boton-custom"  type="button" onclick="preview()" value="1">Preview <i
+                                class="fa fa-eye fa-2x" aria-hidden="true"></i></button>
                         </div>
                         <div class="col-4">
                             <button name="tipo" class="btn btn-primary boton-custom" type="submit" value="2">Generar
@@ -49,6 +49,26 @@ Resumen de Productos que generan mas ganancias con fechas establecidas
             </div>
     </div>
     </form>
+
+
+    <div class="container" style="position: relative; top:20px; display:none" id='id_tile'>
+        <div class="tile" style="border: black solid">
+                <h3 class="tile-title">Preview</h3>
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Producto</th>
+                      <th>Ganancia</th>
+  
+
+                    </tr>
+                  </thead>
+                  <tbody id='table'>
+
+                  </tbody>
+                </table>
+              </div>
+</div>
     {% endblock contenido %}
 
 
@@ -56,4 +76,73 @@ Resumen de Productos que generan mas ganancias con fechas establecidas
 
     {% include "base/conf_fechas.html" %}
 
+    <script type="text/javascript">
+        // using jQuery get csrftoken from your HTML
+            var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+        
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    // if not safe, set csrftoken
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+            function preview(){
+
+
+                $.ajax({
+                    url: "{%  url 'estrategico:re_producto_generan_ganancias' %}",
+                    method:'POST',
+                    data: {
+                        // here getdata should be a string so that
+                        // in your views.py you can fetch the value using get('getdata')
+                        'tipo': 1,
+                        'fechainicio':$("#id_fechainicio").val(),
+                        'fechafin':$("#id_fechafin").val()
+
+
+                    },
+                    dataType: 'json',
+                    success: function (res, status) {
+                        if(Array.isArray(res)){
+                            $("#error_fechainicio").hide()
+                            $("#error_fechafin").hide()
+                            $("#id_tile").show()
+                            console.log(res)
+                            var table=$("#table");
+                            $("#table").html("")
+                            res.forEach(function(elemento){
+                            table.append("<tr><td>"+elemento.idProducto__nombre+"</td><td>"
+                            +elemento.ganancia+
+                            "</td></tr>");
+                            }
+                            );
+                        }
+                        else{
+                            $("#error_fechainicio").hide()
+                            $("#error_fechafin").hide()
+                            $("#id_tile").hide()
+                           
+                            obj=JSON.parse(res)
+                            if(obj.fechafin!=null){
+                                $("#error_fechafin").show()
+                                $("#error_fechafin").html(obj.fechafin[0].message)
+                            }
+                            if(obj.fechainicio!=null){
+                                $("#error_fechainicio").show()
+                                $("#error_fechainicio").html(obj.fechainicio[0].message)
+                            }
+                        }
+                    },
+                    error: function (res) {
+                        console.log(res);                                                                                                                          
+                    }
+                });
+            }
+        </script>
     {% endblock plugins %}
