@@ -113,8 +113,11 @@ class ProductosGeneranGananciaView(LoginRequiredMixin,PermissionRequiredMixin,ge
         if form.is_valid():
             print("valido")
         else:
-            form.AddIsInvalid()
-            return render(request, self.template_name, {'form':form})
+            if request.is_ajax():
+                return JsonResponse(form.errors.as_json(),safe=False)
+            else:
+                form.AddIsInvalid()
+                return render(request, self.template_name, {'form':form})
 
         inicio=request.POST.get("fechainicio",None)
         fin=request.POST.get("fechafin",None)
