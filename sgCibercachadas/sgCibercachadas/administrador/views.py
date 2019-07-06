@@ -11,6 +11,7 @@ from django.http import Http404
 from gerencial.models import Bitacora
 from datetime import datetime
 from administrador.forms import *
+from plantilla_reporte.bitacorapdf.bitacora import reporte
 
 class AdminUsuariosView(LoginRequiredMixin,PermissionRequiredMixin,generic.ListView):
     model = User
@@ -148,8 +149,7 @@ class BitacorasView(LoginRequiredMixin, generic.ListView):
     model = Bitacora
     context_object_name = "obj"
     ordering=['-id']
-    paginate_by = 10  
-
+    paginate_by = 10
     def get_queryset(self):
         query = self.request.GET.get('fecha')
         if query!='' and query:
@@ -161,4 +161,7 @@ class BitacorasView(LoginRequiredMixin, generic.ListView):
     
     def post(self,request,*args,**kwargs):
         print(request.GET.get('fecha'))
-        return redirect('administrador:admin_bitacora_usuarios')
+        bitacora = int(request.POST.get('bitacora'))
+        if(bitacora == 1):
+            data = self.model.objects.all()
+            return reporte(request,data,'bitacora')
