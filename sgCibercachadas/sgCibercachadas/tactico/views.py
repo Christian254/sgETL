@@ -74,7 +74,7 @@ class ProductosMasVendidosView(LoginRequiredMixin,PermissionRequiredMixin, gener
                 #bitacora 
                 Bitacora.objects.create(
                 usuario=request.user.first_name+" "+request.user.last_name,
-                accion="Generado reporte tactico: productos mas vendidos (pdf)")
+                accion="reporte tactico: productos mas vendidos (pdf)")
 
                 return producto_vendido.reporte(request,detalle_vendido[:30],'producto_vendido_tactico',inicio,fin,categoria)
             else:
@@ -86,7 +86,7 @@ class ProductosMasVendidosView(LoginRequiredMixin,PermissionRequiredMixin, gener
                 #bitacora 
                 Bitacora.objects.create(
                 usuario=request.user.first_name+" "+request.user.last_name,
-                accion="Generado reporte tactico: productos mas vendidos (xls)")
+                accion="reporte tactico: productos mas vendidos (xls)")
 
                 return producto_vendidoxls.hoja_calculo(request,detalle_vendido[:30],'producto_vendido_tactico',inicio,fin,categoria)
             else:
@@ -159,7 +159,7 @@ class ProductosGeneranGananciaView(LoginRequiredMixin,PermissionRequiredMixin,ge
                 #bitacora 
                 Bitacora.objects.create(
                 usuario=request.user.first_name+" "+request.user.last_name,
-                accion="Generado reporte tactico: productos ganancia (pdf)")
+                accion="reporte tactico: productos ganancia (pdf)")
 
                 return producto_ganancia.reporte(request,detalle_vendido[:30],'producto_ganancia_tactico',inicio,fin,categoria)
             else:
@@ -171,7 +171,7 @@ class ProductosGeneranGananciaView(LoginRequiredMixin,PermissionRequiredMixin,ge
                 #bitacora 
                 Bitacora.objects.create(
                 usuario=request.user.first_name+" "+request.user.last_name,
-                accion="Generado reporte tactico: productos ganancia (xls)")
+                accion="reporte tactico: productos ganancia (xls)")
 
                 return producto_gananciaxls.hoja_calculo(request,detalle_vendido[:30],'producto_ganancia_tactico',inicio,fin,categoria)
             else:
@@ -227,7 +227,7 @@ class RetornoEquiposGarantiaView(LoginRequiredMixin,PermissionRequiredMixin,gene
                 #bitacora 
                 Bitacora.objects.create(
                 usuario=request.user.first_name+" "+request.user.last_name,
-                accion="Generado reporte tactico: productos retorno (pdf)")
+                accion="reporte tactico: productos retorno (pdf)")
 
                 return producto_retorno.reporte(request,retorno[:15],'producto_retorno_tactico',inicio,fin,categoria)
             else:
@@ -239,7 +239,7 @@ class RetornoEquiposGarantiaView(LoginRequiredMixin,PermissionRequiredMixin,gene
                 #bitacora 
                 Bitacora.objects.create(
                 usuario=request.user.first_name+" "+request.user.last_name,
-                accion="Generado reporte tactico: productos retorno (xls)")
+                accion="reporte tactico: productos retorno (xls)")
 
                 return producto_retornoxls.hoja_calculo(request,retorno[:15],'producto_retorno_tactico',inicio,fin,categoria)
             else:
@@ -288,7 +288,7 @@ class RetornoEnConsignaView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
                 #bitacora 
                 Bitacora.objects.create(
                 usuario=request.user.first_name+" "+request.user.last_name,
-                accion="Generado reporte tactico: productos en consigna (pdf)")
+                accion="reporte tactico: productos en consigna (pdf)")
 
                 return producto_consigna.reporte(request,consigna[:20],'producto_consigna',inicio,fin)
             else:
@@ -299,7 +299,7 @@ class RetornoEnConsignaView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
 
                 Bitacora.objects.create(
                 usuario=request.user.first_name+" "+request.user.last_name,
-                accion="Generado reporte tactico: productos en consigna (xls)")
+                accion="reporte tactico: productos en consigna (xls)")
 
                 return producto_consignaxls.hoja_calculo(request,consigna[:20],'producto_consigna',inicio,fin)
             else:
@@ -372,7 +372,7 @@ class ClientesGananciaView(LoginRequiredMixin,PermissionRequiredMixin,generic.Te
                     #bitacora 
                     Bitacora.objects.create(
                     usuario=request.user.first_name+" "+request.user.last_name,
-                    accion="Generado reporte tactico: clientes ganancia (pdf)")
+                    accion="reporte tactico: clientes ganancia (pdf)")
 
                     return producto_cliente.reporte(request,detalle_cliente[:15],'producto_cliente_tactico',inicio,fin,cliente_id)
                 else:
@@ -384,7 +384,7 @@ class ClientesGananciaView(LoginRequiredMixin,PermissionRequiredMixin,generic.Te
                     #bitacora 
                     Bitacora.objects.create(
                     usuario=request.user.first_name+" "+request.user.last_name,
-                    accion="Generado reporte tactico: clientes ganancia (pdf)")                    
+                    accion="reporte tactico: clientes ganancia (pdf)")                    
 
                     return producto_cliente.reporte(request,cliente_agrupado[:15],'producto_cliente_tactico',inicio,fin,cliente_id)
                 else:
@@ -397,7 +397,7 @@ class ClientesGananciaView(LoginRequiredMixin,PermissionRequiredMixin,generic.Te
                     #bitacora 
                     Bitacora.objects.create(
                     usuario=request.user.first_name+" "+request.user.last_name,
-                    accion="Generado reporte tactico: clientes ganancia (xls)")
+                    accion="reporte tactico: clientes ganancia (xls)")
 
                     return producto_clientexls.hoja_calculo(request,detalle_cliente[:15],'producto_cliente',inicio,fin,cliente_id)
                 else:
@@ -408,7 +408,7 @@ class ClientesGananciaView(LoginRequiredMixin,PermissionRequiredMixin,generic.Te
                     #bitacora 
                     Bitacora.objects.create(
                     usuario=request.user.first_name+" "+request.user.last_name,
-                    accion="Generado reporte tactico: clientes ganancia (xls)")
+                    accion="reporte tactico: clientes ganancia (xls)")
 
                     return producto_clientexls.hoja_calculo(request,cliente_agrupado[:15],'producto_cliente',inicio,fin,cliente_id)
                 else:
@@ -460,7 +460,7 @@ class ClientesFrecuentesView(LoginRequiredMixin,PermissionRequiredMixin,generic.
                 #bitacora 
                 Bitacora.objects.create(
                 usuario=request.user.first_name+" "+request.user.last_name,
-                accion="Generado reporte tactico: clientes frecuentes (pdf)")
+                accion="reporte tactico: clientes frecuentes (pdf)")
 
                 return cliente_frecuente.reporte(request,frecuente[:20],'cliente_frecuente',inicio,fin)
             else:
@@ -472,7 +472,7 @@ class ClientesFrecuentesView(LoginRequiredMixin,PermissionRequiredMixin,generic.
                 #bitacora 
                 Bitacora.objects.create(
                 usuario=request.user.first_name+" "+request.user.last_name,
-                accion="Generado reporte tactico: clientes frecuentes (xls)")
+                accion="reporte tactico: clientes frecuentes (xls)")
                 
                 return cliente_frecuentexls.hoja_calculo(request,frecuente[:20],'cliente_frecuente',inicio,fin)
             else:
