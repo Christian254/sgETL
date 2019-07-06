@@ -9,7 +9,7 @@ from django.contrib.auth.models import Group
 from django.contrib import messages
 from django.http import Http404
 from gerencial.models import Bitacora
-
+from datetime import datetime
 from administrador.forms import *
 
 class AdminUsuariosView(LoginRequiredMixin,PermissionRequiredMixin,generic.ListView):
@@ -150,4 +150,15 @@ class BitacorasView(LoginRequiredMixin, generic.ListView):
     ordering=['-id']
     paginate_by = 10  
 
+    def get_queryset(self):
+        query = self.request.GET.get('fecha')
+        if query!='' and query:
+            datetime_object = datetime.strptime(query, '%d/%m/%Y')
+            object_list = self.model.objects.filter(fecha__gte = datetime_object)
+        else:
+            object_list = self.model.objects.all()
+        return object_list
     
+    def post(self,request,*args,**kwargs):
+        print(request.GET.get('fecha'))
+        return redirect('administrador:admin_bitacora_usuarios')

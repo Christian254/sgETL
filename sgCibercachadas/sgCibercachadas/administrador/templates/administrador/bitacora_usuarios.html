@@ -13,6 +13,20 @@ Bitacora de usuarios
 {% endblock enlace_actual %}
 {% block contenido %}
 <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+<div class="row">
+        <form class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                  <label for="search" class="sr-only">Fecha</label>
+                  <input type="text" class="form-control" id="fecha" name="fecha" placeholder="Desde fecha" autocomplete="off">
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Buscar <i class="fa fa-search" aria-hidden="true"></i></button>
+        </form>
+        <form method="POST">
+            {% csrf_token %}
+            &nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary-outline mb-2">Generar PDF <i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+        </form>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-12">
             <table class="table table-hover table-bordered dataTable no-footer" id="sampleTable" role="grid"
@@ -45,7 +59,7 @@ Bitacora de usuarios
                 <ul class="pagination">
                     {% if page_obj.has_previous %}
                     <li class="paginate_button page-item previous" id="sampleTable_previous">
-                        <a href="?page={{ page_obj.previous_page_number }}" aria-controls="sampleTable" data-dt-idx="0"
+                        <a href="?fecha={{ request.GET.search }}&?page={{ page_obj.previous_page_number }}" aria-controls="sampleTable" data-dt-idx="0"
                             tabindex="0" class="page-link">
                             Anterior
                         </a>
@@ -54,7 +68,7 @@ Bitacora de usuarios
 
                     {% if page_obj.has_next %}
                     <li class="paginate_button page-item previous" id="sampleTable_previous">
-                        <a href="?page={{ page_obj.next_page_number }}" aria-controls="sampleTable" data-dt-idx="0"
+                        <a href="?fecha={{ request.GET.search }}&?page={{ page_obj.next_page_number }}" aria-controls="sampleTable" data-dt-idx="0"
                             tabindex="0" class="page-link">
                             Siguiente
                         </a>
@@ -64,3 +78,33 @@ Bitacora de usuarios
             </div>
         </div>
         {% endblock contenido %}
+
+        {% block plugins %}
+        <script type="text/javascript">
+            $.fn.datepicker.dates['es'] = {
+                days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+                daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+                daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+                months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
+                    "Octubre", "Noviembre", "Diciembre"
+                ],
+                monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                today: "Hoy",
+                clear: "Borrar",
+                format: "dd/mm/yyyy",
+                titleFormat: "MM yyyy",
+                /* Leverages same syntax as 'format' */
+                weekStart: 0
+            };
+        
+        
+            $('#fecha').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true,
+                todayHighlight: true,
+                language: 'es',
+            });
+
+        </script>
+        
+        {% endblock plugins %}

@@ -11,7 +11,7 @@ from django.db.models import Sum,Count,Q
 from estrategico.forms import  FechasForm
 from plantilla_reporte.funciones.funciones import agrupar_cliente,agrupar_producto_potencial
 import operator
-
+from django.http import JsonResponse
 # Create your views here.
 #LOS CALCULOS DE LOS PORCENTAJES NO SE HAN REALIZADO
 class ProductosGeneranGananciasView(LoginRequiredMixin,PermissionRequiredMixin,generic.TemplateView):
@@ -61,8 +61,7 @@ class ProductosGeneranGananciasView(LoginRequiredMixin,PermissionRequiredMixin,g
         detalle_venta.sort(key=producto_ganancia.clave_orden, reverse=True)
 
         if(tipo==1):
-            messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
-            return redirect(self.request.path_info)
+            return JsonResponse(detalle_venta[:10],safe=False)
         elif(tipo==2):
             if(detalle_venta):
                 #bitacora 
@@ -126,8 +125,7 @@ class ProductosPotencialesView(LoginRequiredMixin,PermissionRequiredMixin,generi
             potencial=agrupar_producto_potencial(potencial)
         potencial.sort(key=producto_potencial.clave_orden,reverse=True)
         if(tipo==1):
-            messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
-            return redirect(self.request.path_info)
+            return JsonResponse(potencial[:5],safe=False)
         elif(tipo==2):
 
             if(potencial):
@@ -203,8 +201,7 @@ class ProductosGananciasClientesView(LoginRequiredMixin,PermissionRequiredMixin,
         detalle_cliente.sort(key=producto_ganancia.clave_orden,reverse=True)
         
         if(tipo==1):
-            messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
-            return redirect(self.request.path_info)
+            return JsonResponse(detalle_cliente[:10],safe=False)
         elif(tipo==2):
 
             if(detalle_cliente):
@@ -275,8 +272,7 @@ class ProductosVendidosView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
             total_cantidad += det['cantidad__sum']
 
         if(tipo==1):
-            messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
-            return redirect(self.request.path_info)
+            return JsonResponse(detalle_vendido[:10],safe=False)
         elif(tipo==2):
 
             if(detalle_vendido):
@@ -378,8 +374,7 @@ class ProductosTardanzaProductosView(LoginRequiredMixin,PermissionRequiredMixin,
         
         fin_tardanza.sort(key=producto_tardanza.clave_orden,reverse=True)
         if(tipo==1):
-            messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
-            return redirect(self.request.path_info)
+            return JsonResponse(fin_tardanza[:10],safe=False)
         elif(tipo==2):
 
             if(fin_tardanza):

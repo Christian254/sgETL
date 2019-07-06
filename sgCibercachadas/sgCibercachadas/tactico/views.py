@@ -13,6 +13,7 @@ from plantilla_reporte.tacticopdf import producto_vendido, producto_ganancia,pro
 from plantilla_reporte.tacticoxls import producto_vendidoxls, producto_gananciaxls,producto_retornoxls,producto_consignaxls,producto_clientexls,cliente_frecuentexls
 from plantilla_reporte.funciones.funciones import agrupar_cliente_tactico, agrupar_cliente_frecuente
 import operator
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -67,8 +68,7 @@ class ProductosMasVendidosView(LoginRequiredMixin,PermissionRequiredMixin, gener
         
         detalle_vendido.sort(key=producto_vendido.clave_orden,reverse=True)
         if(tipo==1):
-            messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
-            return redirect(self.request.path_info)
+            return JsonResponse(detalle_vendido[:10],safe=False)
         elif(tipo==2):
             if(detalle_vendido):
                 #bitacora 
@@ -148,8 +148,8 @@ class ProductosGeneranGananciaView(LoginRequiredMixin,PermissionRequiredMixin,ge
         
         detalle_vendido.sort(key=producto_ganancia.clave_orden,reverse=True)
         if(tipo==1):
-            messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
-            return redirect(self.request.path_info)
+            return JsonResponse(detalle_vendido[:10],safe=False)
+
         elif(tipo==2):
             if(detalle_vendido):
                 
@@ -216,8 +216,8 @@ class RetornoEquiposGarantiaView(LoginRequiredMixin,PermissionRequiredMixin,gene
 
         retorno.sort(key=producto_retorno.clave_orden,reverse=True)
         if(tipo==1):
-            messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
-            return redirect(self.request.path_info)
+            return JsonResponse(retorno[:10],safe=False)
+
         elif(tipo==2):
             if(retorno):
                 
@@ -278,8 +278,7 @@ class RetornoEnConsignaView(LoginRequiredMixin,PermissionRequiredMixin,generic.T
         consigna = list(ProductoConsigna.objects.filter(fechaFin__gte=fecha_fin).values('idProducto__nombre','idProducto__idCategoria__nombre','fechaInicio','fechaFin','idCliente__nombre').annotate(Sum('cantidad')))
         consigna.sort(key=producto_consigna.clave_orden,reverse=True)
         if(tipo==1):
-            messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
-            return redirect(self.request.path_info)
+            return JsonResponse(consigna[:10],safe=False)
         elif(tipo==2):
             if(consigna):
                 
@@ -361,8 +360,8 @@ class ClientesGananciaView(LoginRequiredMixin,PermissionRequiredMixin,generic.Te
         if(detalle_cliente):
             cliente_agrupado = agrupar_cliente_tactico(detalle_cliente,'idVenta__idCliente__nombre')
         if(tipo==1):
-            messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
-            return redirect(self.request.path_info)
+            return JsonResponse(detalle_cliente[:10],safe=False)
+
         elif(tipo==2):
             if(cliente_id):
                 if(detalle_cliente):
@@ -451,8 +450,8 @@ class ClientesFrecuentesView(LoginRequiredMixin,PermissionRequiredMixin,generic.
             frecuente = agrupar_cliente_frecuente(detalle_cliente)
             frecuente.sort(key=cliente_frecuente.clave_orden,reverse=True)
         if(tipo==1):
-            messages.add_message(request, messages.WARNING, 'AUN ESTA EN DESARROLLO')
-            return redirect(self.request.path_info)
+            return JsonResponse(frecuente[:10],safe=False)
+
         elif(tipo==2):
             if(frecuente):
                 #bitacora 
